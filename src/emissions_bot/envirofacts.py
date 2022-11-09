@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import io
-from typing import List, Literal, Optional
+from typing import List, Literal
 
 import requests
 import pandas as pd
