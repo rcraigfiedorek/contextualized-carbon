@@ -4,8 +4,9 @@ from random import Random
 from apiflask import APIFlask, pagination_builder
 
 from emissions_bot.api.schemas import (CompanyListOutput, CompanyOutput,
+                                       CompanyQueryInput,
                                        EmissionComparisonFactOutput,
-                                       EmissionQueryInput, PaginationInput,
+                                       EmissionFactQueryInput,
                                        RefreshDatabaseInput)
 from emissions_bot.database import CompanyModel, EmissionsModel, db
 
@@ -40,6 +41,17 @@ def build_database():
                 emissions=[emissions2020, emissions2021]
             )
             db.session.add(company)
+        emissions2019 = EmissionsModel(
+            year=2019,
+            facility_count=Random(2019).randint(1, 100),
+            all_facility_emissions=Random(2019).random(),
+            fully_owned_emissions=Random(2019).random() / 2
+        )
+        company_only_2019 = CompanyModel(
+            name='Company with 2019 emissions',
+            emissions=[emissions2019]
+        )
+        db.session.add(company_only_2019)
         db.session.commit()
 
 
@@ -55,10 +67,23 @@ def get_company(company_id):
 
 
 @app.get('/companies')
-@app.input(PaginationInput, location='query')
+@app.input(CompanyQueryInput, location='query')
 @app.output(CompanyListOutput)
 def get_companies(query):
-    result = CompanyModel.query.paginate(
+    sql = CompanyModel.query
+    if 'name' in query:
+        sql = sql.filter(CompanyModel.name.ilike(f'%{query["name"]}%'))
+    if 'year' in query:
+        sql = sql.filter(CompanyModel.emissions.any(EmissionsModel.year == query['year']))
+    if 'sort_by' in query:
+        if query['sort_by'] == 'name':
+            sql = sql.order_by(CompanyModel.name)
+        else:
+            sql = sql.join(CompanyModel.emissions)\
+                .filter(EmissionsModel.year == query['sort_year'])\
+                .order_by(getattr(EmissionsModel, query['sort_by']).desc())
+
+    result = sql.paginate(
         page=query['page'],
         per_page=query['per_page']
     )
@@ -66,7 +91,7 @@ def get_companies(query):
 
 
 @app.get('/randomEmissionComparisonFact')
-@app.input(EmissionQueryInput, location='query')
+@app.input(EmissionFactQueryInput, location='query')
 @app.output(EmissionComparisonFactOutput)
 def get_random_emission_comparison_fact(query):
     return {}
