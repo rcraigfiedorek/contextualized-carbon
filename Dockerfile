@@ -1,8 +1,6 @@
 FROM python:3.10-slim-bullseye
 
-ARG POETRY_VERSION
-
-RUN pip install "poetry==$POETRY_VERSION"
+RUN pip install "poetry==1.2.2"
 
 WORKDIR /code
 
