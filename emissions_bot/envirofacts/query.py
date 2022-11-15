@@ -4,9 +4,8 @@ import dataclasses
 import io
 from typing import List, Literal
 
-import requests
 import pandas as pd
-
+import requests
 
 ENVIROFACTS_URL = 'https://data.epa.gov/efservice'
 
@@ -21,8 +20,18 @@ class Query:
             self.tables.append(TableQueryData(table_name))
 
     @property
-    def url(self):
-        return ENVIROFACTS_URL + ''.join(table.url_path for table in self.tables) + '/CSV'
+    def base_url(self) -> str:
+        return ENVIROFACTS_URL + ''.join(table.url_path for table in self.tables)
+
+    def count(self) -> int:
+        url = self.base_url + '/count/json'
+        response = requests.get(url)
+        response.raise_for_status()
+        return int(list(response.json()[0].values())[0])
+
+    def url(self, start=None, end=None) -> str:
+        rows = ('/rows/%s:%s' % (start, end)) if (start is not None and end is not None) else ''
+        return self.base_url + rows + '/CSV'
 
     def table(self, table_name: str):
         self.tables.append(TableQueryData(table_name))
@@ -76,11 +85,24 @@ class Query:
         ))
         return self
 
-    def get(self) -> pd.DataFrame:
-        with io.StringIO() as buf:
-            buf.write(requests.get(self.url).text)
-            buf.seek(0)
-            return pd.read_csv(buf)
+    def get(self, paginate=False, **kwargs) -> pd.DataFrame:
+        def url_to_df(_url):
+            print(_url)
+            response = requests.get(_url)
+            response.raise_for_status()
+            with io.StringIO() as buf:
+                buf.write(response.text)
+                buf.seek(0)
+                return pd.read_csv(buf, **kwargs)
+
+        if paginate:
+            print(self.count())
+            return pd.concat((
+                url_to_df(self.url(start=i, end=i+999))
+                for i in range(0, self.count(), 1000)
+            ), ignore_index=True)
+        else:
+            return url_to_df(self.url())
 
 
 @dataclasses.dataclass

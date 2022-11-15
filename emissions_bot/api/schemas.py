@@ -5,6 +5,7 @@ from marshmallow import ValidationError, pre_dump, validate, validates_schema
 class BaseSchema(Schema):
     class Meta:
         strict = True
+        ordered = True
 
 
 class EmissionsYearOutput(BaseSchema):
