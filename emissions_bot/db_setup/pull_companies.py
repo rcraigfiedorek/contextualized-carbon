@@ -1,52 +1,10 @@
 import os
-import re
 import zipfile
-from typing import Generator, List
+from typing import Generator
 
 import pandas as pd
 
-from emissions_bot import envirofacts
 from emissions_bot.database import CompanyModel, EmissionsModel
-
-
-def get_company_names() -> List[str]:
-    facilities = envirofacts.Query('pub_dim_facility').get(usecols=['PARENT_COMPANY'])
-
-    companies = set()
-    for entry in facilities.PARENT_COMPANY:
-        if pd.isnull(entry):
-            continue
-        separated = re.split(r'\s*\([0-9\.]+\%\);?\s*', entry)
-        companies.update(company.upper() for company in separated[:-1])
-    return sorted(companies)
-
-
-def pull_company(company_name: str) -> CompanyModel:
-    emissions: List[EmissionsModel] = list()
-
-    data = envirofacts.Query('pub_dim_facility')\
-        .column_contains('parent_company', company_name)\
-        .table('pub_facts_sector_ghg_emission')\
-        .column_nequals('sector_id', '17')\
-        .get(usecols=['year', 'parent_company', 'co2e_emission'])
-    pat = re.escape(company_name) + r'\s*\(([0-9\.]+)\%\)'
-    ownership_coeff = data.parent_company.str.extract(pat, flags=re.IGNORECASE, expand=False).astype(float) / 100
-    data['co2e_emission_owned'] = data.co2e_emission * ownership_coeff
-    data = data[~ownership_coeff.isnull()]
-
-    for row in data.groupby(by='year').aggregate(
-        facility_count=('co2e_emission', 'count'),
-        all_facility_emissions=('co2e_emission', 'sum'),
-        fully_owned_emissions=('co2e_emission_owned', 'sum')
-    ).itertuples():
-        emissions.append(EmissionsModel(
-            year=row.Index,
-            facility_count=row.facility_count,
-            all_facility_emissions=row.all_facility_emissions,
-            fully_owned_emissions=row.fully_owned_emissions
-        ))
-
-    return CompanyModel(name=company_name, emissions=emissions)
 
 
 def read_zip_data() -> pd.DataFrame:
