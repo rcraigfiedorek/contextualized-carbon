@@ -45,7 +45,7 @@ jobs:
       uses: 'google-github-actions/auth@v1'
       with:
         workload_identity_provider: 'projects/135442769611/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-        service_account: 'emissions-bot-github@$PROJECT_ID.iam.gserviceaccount.com'
+        service_account: 'emissions-bot-github@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
     # Alternative option - authentication via credentials json
     # - id: 'auth'
