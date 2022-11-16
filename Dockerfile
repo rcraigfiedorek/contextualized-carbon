@@ -1,3 +1,4 @@
+# Source: https://github.com/python-poetry/poetry/discussions/1879#discussioncomment-216865
 # `python-base` sets up all our shared environment variables
 FROM python:3.10-slim-bullseye as python-base
 
@@ -62,7 +63,7 @@ COPY --from=builder-base $POETRY_HOME $POETRY_HOME
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 
 # quicker install as runtime deps are already installed
-RUN poetry install
+RUN poetry install --no-root
 
 COPY . /app/
 WORKDIR /app
