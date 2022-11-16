@@ -78,5 +78,5 @@ COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 COPY . /app/
 WORKDIR /app
 EXPOSE 5000
-CMD ["gunicorn", "-w", "4", "-b", ":5000", "emissions_bot:app"]
+CMD exec gunicorn --bind :$PORT --workers 4 --threads 8 --timeout 0 emissions_bot:app
 
