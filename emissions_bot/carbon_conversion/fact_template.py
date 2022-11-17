@@ -1,4 +1,0 @@
-
-
-class FactTemplate:
-    pass
