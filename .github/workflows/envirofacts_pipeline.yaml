@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 env:
+  PROJECT_ID: ${{ secrets.GCE_PROJECT }}
   INSTANCE_CONNECTION_NAME: ${{ secrets.DB_CONNECTION_NAME }}
   DB_NAME: ${{ secrets.DB_NAME }}
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -12,6 +13,10 @@ env:
 jobs:
   pipeline:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
     - name: Checkout
