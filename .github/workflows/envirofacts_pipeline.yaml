@@ -50,4 +50,6 @@ jobs:
       working-directory: ./server
       env:
         FLASK_APP: api
-      run: flask db init
+      run: |
+        source .venv/bin/activate
+        flask db init
