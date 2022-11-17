@@ -15,9 +15,6 @@
 name: Build and Deploy to Google Compute Engine
 
 on:
-  push:
-    branches:
-    - 'main'
   workflow_dispatch:
 
 env:

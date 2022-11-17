@@ -1,0 +1,54 @@
+name: Envirofacts Corporate Emissions Data Pipeline
+
+on:
+  workflow_dispatch:
+
+env:
+  INSTANCE_CONNECTION_NAME: ${{ secrets.DB_CONNECTION_NAME }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_USER: ${{ secrets.DB_USER }}
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: 1.2.2
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      working-directory: ./server
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      working-directory: ./server
+      run: poetry install --no-interaction --no-root
+
+    - name: Install project
+      working-directory: ./server
+      run: poetry install --no-interaction
+    
+    - name: Run pipeline script
+      working-directory: ./server
+      env:
+        FLASK_APP: api
+      run: flask db init

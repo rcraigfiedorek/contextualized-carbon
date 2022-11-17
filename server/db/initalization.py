@@ -1,3 +1,5 @@
+import cleanco
+
 from db.envirofacts import Query
 from db.instance import db
 from db.models import CompanyModel, EmissionsModel
@@ -14,6 +16,7 @@ def envirofacts_pipeline():
         .reset_index(level=1, drop=True)\
         .str.upper()\
         .str.extract(r'\s*(?P<company>.+)\s+\((?P<ownership>[0-9\.]+)%\)')
+    companies.company = companies.company.applymap(cleanco.basename, na_action='ignore')
     companies.ownership = companies.ownership.astype(float) / 100
 
     data = data[['co2e_emission', 'year']].join(companies).reset_index(drop=True)
@@ -25,6 +28,9 @@ def envirofacts_pipeline():
         all_facility_emissions=('co2e_emission', 'sum'),
         fully_owned_emissions=('co2e_emission_owned', 'sum')
     )
+
+    db.drop_all()
+    db.create_all()
 
     for company_name in grouped_data.index.levels[0]:
         emissions = [
