@@ -6,24 +6,23 @@ import pg8000
 from flask_sqlalchemy import SQLAlchemy
 from google.cloud.sql.connector import Connector, IPTypes
 
-instance_connection_name = os.environ['INSTANCE_CONNECTION_NAME']  # e.g. 'project:region:instance'
-db_user = os.environ['DB_USER']  # e.g. 'my-db-user'
-db_pass = os.environ['DB_PASS']  # e.g. 'my-db-password'
+instance_connection_name = os.environ['INSTANCE_CONNECTION_NAME']
+db_user = os.environ['DB_USER']
+db_pass = os.environ['DB_PASS']
 db_name = os.environ['DB_NAME']
 ip_type = IPTypes.PRIVATE if os.environ.get('PRIVATE_IP') else IPTypes.PUBLIC
 
-connector = Connector()
-
 
 def getconn() -> pg8000.dbapi.Connection:
-    return connector.connect(
-        instance_connection_name,
-        "pg8000",
-        user=db_user,
-        password=db_pass,
-        db=db_name,
-        ip_type=ip_type
-    )
+    with Connector() as connector:
+        return connector.connect(
+            instance_connection_name,
+            "pg8000",
+            user=db_user,
+            password=db_pass,
+            db=db_name,
+            ip_type=ip_type
+        )
 
 
 db = SQLAlchemy(engine_options=dict(

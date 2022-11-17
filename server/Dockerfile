@@ -65,16 +65,20 @@ COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 # quicker install as runtime deps are already installed
 RUN poetry install --no-root
 
-COPY . /app/
-WORKDIR /app
-CMD exec gunicorn --bind :5000 --workers 1 --threads 8 --timeout 0 emissions_bot:app
+WORKDIR /server
+COPY ./api/ ./api
+COPY ./db/ ./db/
+EXPOSE 5000
+CMD exec gunicorn --bind :5000 --workers 4 --threads 8 --timeout 0 api:app
 
 
 # `production` image used for runtime
 FROM python-base as production
 ENV FASTAPI_ENV=production
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
-COPY . /app/
-WORKDIR /app
-CMD exec gunicorn --bind :5000 --workers 1 --threads 8 --timeout 0 emissions_bot:app
+WORKDIR /server
+COPY ./api/ ./api
+COPY ./db/ ./db/
+EXPOSE 5000
+CMD exec gunicorn --bind :5000 --workers 4 --threads 8 --timeout 0 api:app
 
