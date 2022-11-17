@@ -1,4 +1,4 @@
-import cleanco
+# import cleanco
 
 from db.envirofacts import Query
 from db.instance import db
@@ -16,7 +16,7 @@ def envirofacts_pipeline():
         .reset_index(level=1, drop=True)\
         .str.upper()\
         .str.extract(r'\s*(?P<company>.+)\s+\((?P<ownership>[0-9\.]+)%\)')
-    companies.company = companies.company.applymap(cleanco.basename, na_action='ignore')
+    # companies.company = companies.company.map(cleanco.basename, na_action='ignore')
     companies.ownership = companies.ownership.astype(float) / 100
 
     data = data[['co2e_emission', 'year']].join(companies).reset_index(drop=True)
