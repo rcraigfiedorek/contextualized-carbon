@@ -10,6 +10,8 @@ app.config.from_mapping(
 )
 db.init_app(app)
 
-AppGroup('db').command('init')(envirofacts_pipeline)
+db_cli = AppGroup('db')
+db_cli.command('init')(envirofacts_pipeline)
+app.cli.add_command(db_cli)
 
 app.register_blueprint(bp)
