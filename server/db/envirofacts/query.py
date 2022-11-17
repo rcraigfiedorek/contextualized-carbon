@@ -13,7 +13,7 @@ ENVIROFACTS_URL = 'https://data.epa.gov/efservice'
 
 
 def LOGGER() -> logging.Logger:
-    return current_app().logger
+    return current_app.logger
 
 
 class Query:
