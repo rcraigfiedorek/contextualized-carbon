@@ -46,18 +46,17 @@ jobs:
       working-directory: ./server
       run: poetry install --no-interaction
     
-    - name: Write DB auth credentials to file
-      uses: jsdaniell/create-json@v1.2.1
+    - name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
       with:
-        name: "credentials.json"
-        json: ${{ secrets.DB_GOOGLE_APPLICATION_CREDENTIALS }}
-        dir: 'secrets/'
+        workload_identity_provider: 'projects/135442769611/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+        service_account: 'emissions-bot-github@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+
 
     - name: Run pipeline script
       working-directory: ./server
       env:
         FLASK_APP: api
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GITHUB_WORKSPACE }}/secrets/credentials.json
       run: |
         source .venv/bin/activate
         flask db init
