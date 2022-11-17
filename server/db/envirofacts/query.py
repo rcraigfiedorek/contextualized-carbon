@@ -7,13 +7,15 @@ from typing import Iterable, List, Literal
 
 import pandas as pd
 import requests
-from flask import current_app
+from flask import current_app, has_app_context
 
 ENVIROFACTS_URL = 'https://data.epa.gov/efservice'
 
 
 def LOGGER() -> logging.Logger:
-    return current_app.logger
+    if has_app_context():
+        return current_app.logger
+    return logging.getLogger
 
 
 class Query:

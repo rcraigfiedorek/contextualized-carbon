@@ -15,3 +15,5 @@ db_cli.command('init')(envirofacts_pipeline)
 app.cli.add_command(db_cli)
 
 app.register_blueprint(bp)
+
+app.logger.setLevel('INFO')
