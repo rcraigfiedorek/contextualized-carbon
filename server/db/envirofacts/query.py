@@ -7,8 +7,13 @@ from typing import Iterable, List, Literal
 
 import pandas as pd
 import requests
+from flask import current_app
 
 ENVIROFACTS_URL = 'https://data.epa.gov/efservice'
+
+
+def LOGGER() -> logging.Logger:
+    return current_app().logger
 
 
 class Query:
@@ -100,7 +105,8 @@ class Query:
                     df = pd.read_csv(buf)
             if not isinstance(df, pd.DataFrame):
                 raise RuntimeError(f'Ill-formed data received from URL "{_url}": {response.text}')
-            logging.info(f'Successfully pulled {df.shape[0]} rows and {df.shape[1]} columns of data from URL "{_url}".')
+            LOGGER().info('Successfully pulled %s rows and %s columns of data from URL "%s".',
+                          df.shape[0], df.shape[1], _url)
             return df
 
         if pagesize is not None:

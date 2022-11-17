@@ -46,10 +46,18 @@ jobs:
       working-directory: ./server
       run: poetry install --no-interaction
     
+    - name: Write DB auth credentials to file
+      uses: jsdaniell/create-json@v1.2.1
+      with:
+        name: "credentials.json"
+        json: ${{ secrets.DB_GOOGLE_APPLICATION_CREDENTIALS }}
+        dir: 'secrets/'
+
     - name: Run pipeline script
       working-directory: ./server
       env:
         FLASK_APP: api
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GITHUB_WORKSPACE }}/secrets/credentials.json
       run: |
         source .venv/bin/activate
         flask db init
