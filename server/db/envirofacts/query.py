@@ -3,6 +3,7 @@ from __future__ import annotations
 import dataclasses
 import io
 import logging
+import sys
 from typing import Iterable, List, Literal
 
 import pandas as pd
@@ -101,12 +102,14 @@ class Query:
             with io.StringIO() as buf:
                 buf.write(response.text)
                 buf.seek(0)
-                if fmt == 'json':
-                    df = pd.read_json(buf)
-                else:
-                    df = pd.read_csv(buf)
-            if not isinstance(df, pd.DataFrame):
-                raise RuntimeError(f'Ill-formed data received from URL "{_url}": {response.text}')
+                try:
+                    if fmt == 'json':
+                        df = pd.read_json(buf, typ='frame')
+                    else:
+                        df = pd.read_csv(buf)
+                except Exception:
+                    LOGGER().error('Ill-formed data received from URL "%s": %s', _url, response.text, sys.exc_info())
+                    raise
             LOGGER().info('Successfully pulled %s rows and %s columns of data from URL "%s".',
                           df.shape[0], df.shape[1], _url)
             return df
