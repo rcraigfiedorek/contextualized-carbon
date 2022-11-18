@@ -3,13 +3,6 @@ name: Envirofacts Corporate Emissions Data Pipeline
 on:
   workflow_dispatch:
 
-env:
-  PROJECT_ID: ${{ secrets.GCE_PROJECT }}
-  INSTANCE_CONNECTION_NAME: ${{ secrets.DB_CONNECTION_NAME }}
-  DB_NAME: ${{ secrets.DB_NAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DB_USER: ${{ secrets.DB_USER }}
-
 jobs:
   pipeline:
     runs-on: ubuntu-latest
@@ -51,12 +44,11 @@ jobs:
       working-directory: ./server
       run: poetry install --no-interaction
     
-    - name: 'Authenticate to Google Cloud'
+    - name: Google Cloud Auth
       uses: 'google-github-actions/auth@v1'
       with:
         workload_identity_provider: 'projects/135442769611/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-        service_account: 'emissions-bot-github@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
-
+        service_account: 'emissions-bot-github@$delta-timer-368701.iam.gserviceaccount.com'
 
     - name: Run pipeline script
       working-directory: ./server

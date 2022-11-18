@@ -3,14 +3,33 @@ name: Deploy to Google Compute Engine
 on:
   workflow_dispatch:
 
-env:
-  PROJECT_ID: ${{ secrets.GCE_PROJECT }}
-  GCE_INSTANCE: instance-1
-  GCE_INSTANCE_ZONE: us-central1-c
 
 jobs:
-  setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+
+  docker-build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Docker Auth
+      uses: docker/login-action@v2
+      with:
+        username: rcraigfiedorek
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Docker Compose Build
+      working-directory: ./docker-compose
+      run: |-
+        docker compose -f docker-compose.dev.yml build
+    
+    - name: Docker Compose Push
+      working-directory: ./docker-compose
+      run: |-
+        docker compose -f docker-compose.dev.yml push
+
+  cloud-deploy:
     runs-on: ubuntu-latest
 
     permissions:
@@ -30,36 +49,20 @@ jobs:
       uses: google-github-actions/auth@v1
       with:
         workload_identity_provider: 'projects/135442769611/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-        service_account: 'emissions-bot-github@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+        service_account: 'emissions-bot-github@delta-timer-368701.iam.gserviceaccount.com'
 
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
-
-    - name: Docker Auth
-      uses: docker/login-action@v2
-      with:
-        username: rcraigfiedorek
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Docker Compose Build
-      working-directory: ./docker-compose
-      run: |-
-        docker compose -f docker-compose.dev.yml build
-    
-    - name: Docker Compose Push
-      working-directory: ./docker-compose
-      run: |-
-        docker compose -f docker-compose.dev.yml push
       
     - name: Update GCE Instance Files
       run: |-
         gcloud compute scp \
           ./docker-compose/docker-compose.prod.yml \
           ./google/compute/instance-startup.sh \
-          instance-1:~/EmissionsBot \
+          rcraigfiedorek@instance-1:~/EmissionsBot \
           --zone us-central1-c
     
-    - name: Restart Server
+    - name: Start Application
       uses: 'google-github-actions/ssh-compute@v0'
       with:
         instance_name: 'instance-1'
