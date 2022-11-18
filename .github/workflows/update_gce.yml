@@ -58,3 +58,12 @@ jobs:
           ./google/compute/instance-startup.sh \
           instance-1:~/EmissionsBot \
           --zone us-central1-c
+    
+    - name: Restart Server
+      uses: 'google-github-actions/ssh-compute@v0'
+      with:
+        instance_name: 'instance-1'
+        zone: 'us-central1-c'
+        ssh_private_key: '${{ secrets.GCE_SSH_KEY }}'
+        command: |-
+          bash ./EmissionsBot/instance-startup.sh
