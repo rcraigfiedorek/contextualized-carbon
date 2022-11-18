@@ -3,7 +3,7 @@ import re
 import cleanco
 
 from db.envirofacts import Query
-from db.instance import db
+from db.connection import db
 from db.models import CompanyModel, EmissionsModel
 
 

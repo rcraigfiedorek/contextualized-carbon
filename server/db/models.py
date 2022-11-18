@@ -1,4 +1,4 @@
-from db.instance import db
+from db.connection import db
 
 
 class CompanyModel(db.Model):
