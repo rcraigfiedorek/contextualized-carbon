@@ -30,6 +30,7 @@ jobs:
         docker compose -f docker-compose.dev.yml push
 
   cloud-deploy:
+    needs: docker-build-push
     runs-on: ubuntu-latest
 
     permissions:
