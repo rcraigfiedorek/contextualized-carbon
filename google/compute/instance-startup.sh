@@ -1,1 +1,2 @@
-sudo docker compose up --build
+sudo docker compose pull
+sudo docker compose up

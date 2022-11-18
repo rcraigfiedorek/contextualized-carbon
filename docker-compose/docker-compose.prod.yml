@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  server:
+    image: rcraigfiedorek/emissions-bot:server
+    secrets:
+      - google_application_credentials
+  client:
+    depends_on:
+      - server
+    image: rcraigfiedorek/emissions-bot:client
+    ports:
+      - "80:80"
