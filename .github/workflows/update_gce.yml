@@ -66,6 +66,7 @@ jobs:
     - name: Start Application
       uses: 'google-github-actions/ssh-compute@v0'
       with:
+        user: rcraigfiedorek
         instance_name: 'instance-1'
         zone: 'us-central1-c'
         ssh_private_key: '${{ secrets.GCE_SSH_KEY }}'
