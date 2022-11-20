@@ -68,12 +68,10 @@ class CompanyQueryInput(PaginationInput):
 
 class EmissionFactQueryInput(BaseSchema):
     emission = fields.Float(required=True)
+    shuffle_key = fields.Integer(required=False)
 
 
 class EmissionComparisonFactOutput(BaseSchema):
     fact = fields.String(required=True)
+    next_shuffle_key = fields.Integer(required=True)
     citations = fields.List(fields.String(), dump_default=list, required=True)
-
-
-class RefreshDatabaseInput(BaseSchema):
-    pass

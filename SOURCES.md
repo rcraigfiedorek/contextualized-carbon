@@ -17,7 +17,7 @@
 - [CO<sub>2</sub> has density of 1.815 kg/m<sup>3</sup> at 20°C and 1bar](https://www.engineeringtoolbox.com/carbon-dioxide-density-specific-weight-temperature-pressure-d_2018.html)
 - Carbon Dioxide Poisoning
     - [Concentrations >10% may cause convulsions, coma and death](https://doi.org/10.2165/00139709-200524040-00003)
-    - [Earth's air column has mass of 1.03 kg/cm<sup>3</sup>](https://en.wikipedia.org/wiki/Atmospheric_pressure)
+    - [Earth's air column has mass of 1.03 kg/cm<sup>2</sup>](https://en.wikipedia.org/wiki/Atmospheric_pressure)
     - [Therefore 0.8738 m<sup>2</sup>/tCO<sub>2</sub> land area's air column is poisoned by carbon emissions](https://www.wolframalpha.com/input?i=Solve+for+x%3A+1tonne%2F%281tonne%2B%281.03%28kg%2Fcm%5E2%29%29%28x%28m%5E2%29%29%29+%3D+.1)
 - Soda
     - "A typical carbonated soft drink contains approximately 3-4 volumes (6-8 g/L) CO<sub>2</sub>"

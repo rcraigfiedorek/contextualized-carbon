@@ -1,5 +1,6 @@
 from apiflask import APIBlueprint, pagination_builder
 
+from api.facts import get_fact_template
 from api.schemas import (CompanyListOutput, CompanyOutput, CompanyQueryInput,
                          EmissionComparisonFactOutput, EmissionFactQueryInput)
 from db import CompanyModel, EmissionsModel
@@ -37,8 +38,12 @@ def get_companies(query):
     return dict(companies=result.items, **pagination_builder(result))
 
 
-@bp.get('/randomEmissionComparisonFact')
+@bp.get('/emissionComparisonFact')
 @bp.input(EmissionFactQueryInput, location='query')
 @bp.output(EmissionComparisonFactOutput)
-def get_random_emission_comparison_fact(query):
-    return {}
+def get_emission_comparison_fact(query):
+    fact_template, next_shuffle_key = get_fact_template(query.get('shuffle_key'))
+    return {
+        'fact': fact_template.get_fact(query['emission']),
+        'next_shuffle_key': next_shuffle_key
+    }
