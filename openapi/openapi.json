@@ -1,0 +1,314 @@
+{
+  "info": {
+    "title": "APIFlask",
+    "version": "0.1.0"
+  },
+  "tags": [
+    {
+      "name": "Api"
+    }
+  ],
+  "paths": {
+    "/api/companies": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "schema": {
+              "type": "integer",
+              "default": 40
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "year",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "sort_by",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "name",
+                "facility_count",
+                "all_facility_emissions",
+                "fully_owned_emissions"
+              ]
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "sort_year",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyListOutput"
+                }
+              }
+            },
+            "description": "Successful response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            },
+            "description": "Validation error"
+          }
+        },
+        "tags": [
+          "Api"
+        ],
+        "summary": "Get Companies"
+      }
+    },
+    "/api/emissionComparisonFact": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "emission",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "shuffle_key",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmissionComparisonFactOutput"
+                }
+              }
+            },
+            "description": "Successful response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            },
+            "description": "Validation error"
+          }
+        },
+        "tags": [
+          "Api"
+        ],
+        "summary": "Get Emission Comparison Fact"
+      }
+    },
+    "/api/companies/{company_id}": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "name": "company_id",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyOutput"
+                }
+              }
+            },
+            "description": "Successful response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPError"
+                }
+              }
+            },
+            "description": "Not found"
+          }
+        },
+        "tags": [
+          "Api"
+        ],
+        "summary": "Get Company"
+      }
+    }
+  },
+  "openapi": "3.0.3",
+  "components": {
+    "schemas": {
+      "ValidationError": {
+        "properties": {
+          "detail": {
+            "type": "object",
+            "properties": {
+              "<location>": {
+                "type": "object",
+                "properties": {
+                  "<field_name>": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "HTTPError": {
+        "properties": {
+          "detail": {
+            "type": "object"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "CompanyOutput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "emissions_by_year": {}
+        },
+        "required": [
+          "emissions_by_year",
+          "id",
+          "name"
+        ]
+      },
+      "CompanyListOutput": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer"
+          },
+          "per_page": {
+            "type": "integer"
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "current": {
+            "type": "string",
+            "format": "url"
+          },
+          "next": {
+            "type": "string",
+            "format": "url"
+          },
+          "prev": {
+            "type": "string",
+            "format": "url"
+          },
+          "first": {
+            "type": "string",
+            "format": "url"
+          },
+          "last": {
+            "type": "string",
+            "format": "url"
+          },
+          "companies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompanyOutput"
+            }
+          }
+        },
+        "required": [
+          "companies"
+        ]
+      },
+      "EmissionComparisonFactOutput": {
+        "type": "object",
+        "properties": {
+          "fact": {
+            "type": "string"
+          },
+          "next_shuffle_key": {
+            "type": "integer"
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "citations",
+          "fact",
+          "next_shuffle_key"
+        ]
+      }
+    }
+  }
+}
