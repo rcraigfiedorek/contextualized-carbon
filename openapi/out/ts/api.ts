@@ -206,10 +206,10 @@ export interface ValidationErrorDetailLocation {
 }
 
 /**
- * ApiApi - axios parameter creator
+ * DefaultApi - axios parameter creator
  * @export
  */
-export const ApiApiAxiosParamCreator = function (configuration?: Configuration) {
+export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -351,11 +351,11 @@ export const ApiApiAxiosParamCreator = function (configuration?: Configuration) 
 };
 
 /**
- * ApiApi - functional programming interface
+ * DefaultApi - functional programming interface
  * @export
  */
-export const ApiApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = ApiApiAxiosParamCreator(configuration)
+export const DefaultApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -400,11 +400,11 @@ export const ApiApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * ApiApi - factory interface
+ * DefaultApi - factory interface
  * @export
  */
-export const ApiApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = ApiApiFp(configuration)
+export const DefaultApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DefaultApiFp(configuration)
     return {
         /**
          * 
@@ -446,22 +446,22 @@ export const ApiApiFactory = function (configuration?: Configuration, basePath?:
 };
 
 /**
- * ApiApi - object-oriented interface
+ * DefaultApi - object-oriented interface
  * @export
- * @class ApiApi
+ * @class DefaultApi
  * @extends {BaseAPI}
  */
-export class ApiApi extends BaseAPI {
+export class DefaultApi extends BaseAPI {
     /**
      * 
      * @summary Get Company
      * @param {number} companyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ApiApi
+     * @memberof DefaultApi
      */
     public apiCompaniesCompanyIdGet(companyId: number, options?: AxiosRequestConfig) {
-        return ApiApiFp(this.configuration).apiCompaniesCompanyIdGet(companyId, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).apiCompaniesCompanyIdGet(companyId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -475,10 +475,10 @@ export class ApiApi extends BaseAPI {
      * @param {number} [sortYear] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ApiApi
+     * @memberof DefaultApi
      */
     public apiCompaniesGet(page?: number, perPage?: number, name?: string, year?: number, sortBy?: 'name' | 'facility_count' | 'all_facility_emissions' | 'fully_owned_emissions', sortYear?: number, options?: AxiosRequestConfig) {
-        return ApiApiFp(this.configuration).apiCompaniesGet(page, perPage, name, year, sortBy, sortYear, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).apiCompaniesGet(page, perPage, name, year, sortBy, sortYear, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -488,10 +488,10 @@ export class ApiApi extends BaseAPI {
      * @param {number} [shuffleKey] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ApiApi
+     * @memberof DefaultApi
      */
     public apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, options?: AxiosRequestConfig) {
-        return ApiApiFp(this.configuration).apiEmissionComparisonFactGet(emission, shuffleKey, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).apiEmissionComparisonFactGet(emission, shuffleKey, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

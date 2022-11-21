@@ -3,11 +3,7 @@
     "title": "APIFlask",
     "version": "0.1.0"
   },
-  "tags": [
-    {
-      "name": "Api"
-    }
-  ],
+  "tags": [],
   "paths": {
     "/api/companies": {
       "get": {
@@ -91,9 +87,6 @@
             "description": "Validation error"
           }
         },
-        "tags": [
-          "Api"
-        ],
         "summary": "Get Companies"
       }
     },
@@ -139,9 +132,6 @@
             "description": "Validation error"
           }
         },
-        "tags": [
-          "Api"
-        ],
         "summary": "Get Emission Comparison Fact"
       }
     },
@@ -179,9 +169,6 @@
             "description": "Not found"
           }
         },
-        "tags": [
-          "Api"
-        ],
         "summary": "Get Company"
       }
     }
