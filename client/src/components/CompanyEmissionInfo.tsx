@@ -1,39 +1,37 @@
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Select from "react-select";
 import { CompanyOutput, DefaultApi } from "../api";
 import { CompanyDropdown } from "./CompanyDropdown";
 
-interface CompanyEmissionInfoProps {}
+interface CompanyEmissionInfoProps {
+  initialCompany: CompanyOutput;
+}
 
 export const CompanyEmissionInfo: React.FunctionComponent<
   CompanyEmissionInfoProps
-> = ({}) => {
-  const [companyOutput, setCompanyOutput] = useState<CompanyOutput | null>(
-    null
+> = ({ initialCompany }) => {
+  const [selectedCompany, setSelectedCompany] =
+    useState<CompanyOutput>(initialCompany);
+  const [selectedYear, setSelectedYear] = useState<string>(
+    _.chain(selectedCompany.emissions_by_year).keys().max().value()
   );
-  const [year, setYear] = useState<string | null>(null);
-  const [emission, setEmission] = useState<number | null>(null);
 
-  useEffect(() => {
-    new DefaultApi().apiCompaniesGet().then(({ data: { companies } }) => {
-      const newCompany = _.head(companies);
-      if (newCompany) {
-        setCompanyOutput(newCompany);
-        setYear(_.chain(newCompany.emissions_by_year).keys().max().value());
-      }
-    });
-  }, []);
+  const [currentFact, setCurrentFact] = useState<string | undefined>();
+  const [factShuffleKey, setFactShuffleKey] = useState<number | undefined>();
+  const [factIsLoading, setFactIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    setEmission(
-      companyOutput && year
-        ? _.get(companyOutput.emissions_by_year, year, null)
-        : null
-    );
-  }, [companyOutput, year]);
+  const emission = useMemo(
+    () =>
+      _.get(selectedCompany, [
+        "emissions_by_year",
+        selectedYear,
+        "fully_owned_emissions",
+      ]),
+    [selectedCompany, selectedYear]
+  );
 
-  const yearOptions = _.chain(companyOutput?.emissions_by_year)
+  const yearOptions = _.chain(selectedCompany?.emissions_by_year)
     .keys()
     .map((yearOption) => ({
       value: yearOption,
@@ -41,24 +39,49 @@ export const CompanyEmissionInfo: React.FunctionComponent<
     }))
     .value();
 
-  if (!companyOutput || !year || !emission) {
+  useEffect(() => {
+    setFactIsLoading(true);
+    new DefaultApi()
+      .apiEmissionComparisonFactGet(emission, factShuffleKey)
+      .then(({ data: { fact, next_shuffle_key } }) => {
+        setFactShuffleKey(next_shuffle_key);
+        setCurrentFact(fact);
+        setFactIsLoading(false);
+      });
+  }, [emission]);
+
+  if (!selectedCompany || !selectedYear || !emission) {
     return <></>;
   } else
     return (
-      <span>
-        <span>{"In "}</span>
-        <span>
-          <Select options={yearOptions} />
-        </span>
-        <span>{", facilities in the US owned by "}</span>
-        <span>
-          <CompanyDropdown />
-        </span>
-        <span>
-          {` reported emissions equivalent to at least ${emission} tonnes of CO`}
-          <sub>{"2"}</sub>
-          {"."}
-        </span>
-      </span>
+      <>
+        <div>
+          <span>{"In "}</span>
+          <span>
+            <Select
+              options={yearOptions}
+              onChange={(singleValue) =>
+                singleValue && setSelectedYear(singleValue.value)
+              }
+            />
+          </span>
+          <span>{", facilities in the US owned by "}</span>
+          <span>
+            <CompanyDropdown
+              yearFilter={selectedYear}
+              setSelectedCompany={setSelectedCompany}
+              selectedCompany={selectedCompany}
+            />
+          </span>
+          <span>
+            {` reported emissions equivalent to at least ${emission} tonnes of CO`}
+            <sub>{"2"}</sub>
+            {"."}
+          </span>
+        </div>
+        <div>
+          (factIsLoading ? <>{currentFact}</> : <></>)
+        </div>
+      </>
     );
 };
