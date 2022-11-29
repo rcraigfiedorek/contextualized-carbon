@@ -4,29 +4,25 @@ import Spinner from "react-bootstrap/Spinner";
 import { CompanyOutput, DefaultApi } from "./api";
 import "./App.css";
 import { CompanyEmissionInfo } from "./components/CompanyEmissionInfo";
-import logo from "./logo.svg";
 
 function App() {
-  const [initCompany, setInitCompany] = useState<CompanyOutput | null>(null);
+  const [initCompany, setInitCompany] = useState<CompanyOutput>();
 
   useEffect(() => {
-    const api = new DefaultApi();
-    api
-      .apiCompaniesGet(1, 1)
-      .then(({ data: { total } }) =>
-        api.apiCompaniesCompanyIdGet(_.random(1, total || 1))
-      )
-      .then(({ data }) => setInitCompany(data));
+    new DefaultApi()
+      .apiCompaniesGet(1, 40, undefined, 2021, "fully_owned_emissions", 2021)
+      .then(({ data: { companies } }) => setInitCompany(_.sample(companies)));
   }, []);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {(initCompany && (
+      <div className="App-body">
+        {!!initCompany ? (
           <CompanyEmissionInfo initialCompany={initCompany} />
-        )) || <Spinner animation="border" />}
-      </header>
+        ) : (
+          <Spinner animation="border" role="status" />
+        )}
+      </div>
     </div>
   );
 }

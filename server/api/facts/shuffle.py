@@ -55,6 +55,7 @@ class ShuffleKey:
 
     @staticmethod
     def random() -> ShuffleKey:
+        random.seed()
         return ShuffleKey.of(random.getrandbits(24), 0)
 
     def overflow(self) -> bool:
