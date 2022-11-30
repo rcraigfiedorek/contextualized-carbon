@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import { CompanyOutput, DefaultApi } from "../api";
+import { api } from "../config";
 
 interface CompanyDropdownProps {
   yearFilter?: string;
@@ -24,7 +25,7 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
   function handleSearch(query: string): Promise<void> {
     setIsLoading(true);
 
-    return new DefaultApi()
+    return api
       .apiCompaniesGet(
         1,
         20,

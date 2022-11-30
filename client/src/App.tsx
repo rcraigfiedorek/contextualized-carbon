@@ -1,15 +1,16 @@
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
-import { CompanyOutput, DefaultApi } from "./api";
+import { CompanyOutput } from "./api";
 import "./App.css";
 import { CompanyEmissionInfo } from "./components/CompanyEmissionInfo";
+import { api } from "./config";
 
 function App() {
   const [initCompany, setInitCompany] = useState<CompanyOutput>();
 
   useEffect(() => {
-    new DefaultApi()
+    api
       .apiCompaniesGet(1, 40, undefined, 2021, "fully_owned_emissions", 2021)
       .then(({ data: { companies } }) => setInitCompany(_.sample(companies)));
   }, []);

@@ -10,6 +10,5 @@ flask spec -o "$OPENAPI_DIR/openapi.json"
 docker run --rm -v "$OPENAPI_DIR:/local" openapitools/openapi-generator-cli:latest generate \
     -i "/local/openapi.json" \
     -g typescript-axios \
-    -o /local/out/ts
-
-cp -a "$OPENAPI_DIR/out/ts/." "$PROJECT_DIR/client/src/api"
+    -o /local/out/ts \
+&& cp -a "$OPENAPI_DIR/out/ts/." "$PROJECT_DIR/client/src/api"

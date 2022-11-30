@@ -7,6 +7,8 @@ services:
       - google_application_credentials
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/google_application_credentials
+    ports:
+      - "5000:5000"
   client:
     depends_on:
       - server

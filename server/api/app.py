@@ -1,5 +1,6 @@
 from apiflask import APIFlask, pagination_builder
 from flask.cli import AppGroup
+from flask_cors import CORS
 
 from api.facts import get_fact_template
 from api.schemas import (CompanyListOutput, CompanyOutput, CompanyQueryInput,
@@ -11,6 +12,8 @@ app.config.from_mapping(
     SQLALCHEMY_DATABASE_URI='postgresql+pg8000://',
 )
 db.init_app(app)
+CORS(origins=['http://localhost:3000']).init_app(app)
+
 
 db_cli = AppGroup('db')
 db_cli.command('init')(envirofacts_pipeline)

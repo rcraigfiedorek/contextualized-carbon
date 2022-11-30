@@ -1,7 +1,8 @@
 import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import Form from "react-bootstrap/Form";
-import { CompanyOutput, DefaultApi } from "../api";
+import { CompanyOutput } from "../api";
+import { api } from "../config";
 import { CompanyDropdown } from "./CompanyDropdown";
 
 interface CompanyEmissionInfoProps {
@@ -42,7 +43,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
 
   useEffect(() => {
     setFactIsLoading(true);
-    new DefaultApi()
+    api
       .apiEmissionComparisonFactGet(emission, factShuffleKey)
       .then(({ data: { fact, next_shuffle_key } }) => {
         setFactShuffleKey(next_shuffle_key);
