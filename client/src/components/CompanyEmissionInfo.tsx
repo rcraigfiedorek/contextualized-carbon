@@ -57,7 +57,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
   } else
     return (
       <>
-        <div>
+        <div className="text-card">
           <span>{"In "}</span>
           <span>
             <Form.Select
@@ -82,7 +82,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
             {"."}
           </span>
         </div>
-        <div>{!factIsLoading ? <>{currentFact}</> : <></>}</div>
+        <div className="text-card">{!factIsLoading ? <>{currentFact}</> : <></>}</div>
       </>
     );
 };
