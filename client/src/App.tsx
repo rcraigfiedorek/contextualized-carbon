@@ -34,19 +34,36 @@ function App() {
         <Navbar.Collapse id="navbar-collapse">
           <Nav>
             <div className="nav-link-container">
-              <Nav.Link href="https://github.com/rcraigfiedorek/emissions-bot">
+              <Nav.Link
+                href="https://github.com/rcraigfiedorek/emissions-bot"
+                target="_blank"
+                rel="noopener noreferrer"
+                active={false}
+              >
                 Source code
                 <img src={github} className="nav-link-icon" />
               </Nav.Link>
             </div>
             <div className="nav-link-container">
-              <Nav.Link href="https://enviro.epa.gov/envirofacts/ghg">
-                Source code
+              <Nav.Link
+                href="https://enviro.epa.gov/envirofacts/ghg"
+                target="_blank"
+                rel="noopener noreferrer"
+                active={false}
+              >
+                Source data
                 <img src={epa} className="nav-link-icon" />
               </Nav.Link>
             </div>
             <div className="nav-link-container">
-              <Nav.Link href="https://craigf.io">About the author</Nav.Link>
+              <Nav.Link
+                href="https://craigf.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                active={false}
+              >
+                About the author
+              </Nav.Link>
             </div>
           </Nav>
         </Navbar.Collapse>
@@ -56,7 +73,11 @@ function App() {
         {!!initCompany ? (
           <CompanyEmissionInfo initialCompany={initCompany} />
         ) : (
-          <Spinner animation="border" role="status" />
+          <Spinner
+            className="initializing-spinner"
+            animation="border"
+            role="status"
+          />
         )}
       </div>
     </div>

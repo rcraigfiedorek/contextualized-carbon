@@ -59,30 +59,29 @@ export const CompanyEmissionInfo: React.FunctionComponent<
       <>
         <div className="text-card">
           <span>{"In "}</span>
-          <span>
-            <Form.Select
-              value={selectedYear}
-              onChange={(event) => setSelectedYear(event.target.value)}
-            >
-              {yearOptions}
-            </Form.Select>
-          </span>
+          <Form.Select
+            className="year-select inline-block"
+            value={selectedYear}
+            onChange={(event) => setSelectedYear(event.target.value)}
+          >
+            {yearOptions}
+          </Form.Select>
           <span>{", facilities in the US owned by "}</span>
-          <span>
-            <CompanyDropdown
-              yearFilter={selectedYear}
-              setSelectedCompany={setSelectedCompany}
-              selectedCompany={selectedCompany}
-              typeaheadClassNames="inline-block"
-            />
-          </span>
+          <CompanyDropdown
+            yearFilter={selectedYear}
+            setSelectedCompany={setSelectedCompany}
+            selectedCompany={selectedCompany}
+            typeaheadClassNames="inline-block"
+          />
           <span>
             {` reported emissions equivalent to at least ${emission} tonnes of CO`}
             <sub>{"2"}</sub>
             {"."}
           </span>
         </div>
-        <div className="text-card">{!factIsLoading ? <>{currentFact}</> : <></>}</div>
+        <div className="text-card">
+          {!factIsLoading ? <>{currentFact}</> : <></>}
+        </div>
       </>
     );
 };

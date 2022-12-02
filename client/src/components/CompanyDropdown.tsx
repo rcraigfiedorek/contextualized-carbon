@@ -1,7 +1,8 @@
+import classNames from "classnames";
 import _ from "lodash";
 import React, { useState } from "react";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
-import { CompanyOutput, DefaultApi } from "../api";
+import { CompanyOutput } from "../api";
 import { api } from "../config";
 
 interface CompanyDropdownProps {
@@ -41,7 +42,7 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
 
   return (
     <AsyncTypeahead
-      className={typeaheadClassNames}
+      className={classNames(typeaheadClassNames, "company-dropdown")}
       filterBy={() => true}
       id="async-example"
       isLoading={isLoading}
