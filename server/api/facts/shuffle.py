@@ -8,7 +8,7 @@ from api.facts.instances import ALL_FACTS
 from api.facts.template import FactTemplate
 
 
-def get_fact_template(shuffle_key: Optional[int]) -> Tuple[FactTemplate, int]:
+def get_fact_template(shuffle_key: Optional[int]) -> Tuple[FactTemplate, int, int]:
     # If this key has passed through all list items, generate a new key which
     # will shuffle the list and iterate through it starting from the beginning.
     shuffle_key: ShuffleKey = ShuffleKey(shuffle_key) if shuffle_key is not None else ShuffleKey.random()
@@ -23,10 +23,11 @@ def get_fact_template(shuffle_key: Optional[int]) -> Tuple[FactTemplate, int]:
     fact_template = shuffled_templates[shuffle_key.index]
 
     # Increment shuffle key
-    next_shuffle_key: int = shuffle_key.key + 1
+    current_shuffle_key: int = shuffle_key.key
+    next_shuffle_key: int = current_shuffle_key + 1
 
     # Return as tuple
-    return fact_template, next_shuffle_key
+    return fact_template, current_shuffle_key, next_shuffle_key
 
 
 @dataclasses.dataclass

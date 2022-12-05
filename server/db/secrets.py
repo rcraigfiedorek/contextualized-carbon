@@ -1,7 +1,9 @@
 
 
 import os
+import warnings
 
+from google.auth.exceptions import DefaultCredentialsError
 from google.cloud.secretmanager import SecretManagerServiceClient
 
 PROJECT_ID = 'delta-timer-368701'
@@ -20,4 +22,12 @@ def get_db_password() -> str:
     if 'EMISSIONS_DB_PASSWORD_FILE' in os.environ:
         with open(os.getenv('EMISSIONS_DB_PASSWORD_FILE'), 'r') as f:
             return f.read()
-    return get_google_secret_value('EMISSIONS_DB_PASSWORD')
+    try:
+        return get_google_secret_value('EMISSIONS_DB_PASSWORD')
+    except DefaultCredentialsError:
+        warnings.warn('Could not determine database password. Please set using one of:\n'
+                      '1) EMISSIONS_DB_PASSWORD environment variable\n'
+                      '2) EMISSIONS_DB_PASSWORD_FILE environment variable\n'
+                      f'3) By granting access to GCP Secret Manager for the "{PROJECT_ID}" project\n'
+                      )
+        return None

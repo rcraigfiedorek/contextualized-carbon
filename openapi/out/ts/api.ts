@@ -132,6 +132,12 @@ export interface EmissionComparisonFactOutput {
      * @type {number}
      * @memberof EmissionComparisonFactOutput
      */
+    'current_shuffle_key': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EmissionComparisonFactOutput
+     */
     'next_shuffle_key': number;
     /**
      * 

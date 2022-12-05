@@ -100,6 +100,7 @@
 
 .nav-link-container {
   display: flex;
+  align-items: center;
   flex-direction: row;
   justify-content: flex-end;
 }
@@ -147,4 +148,17 @@
 
 .rbt-highlight-text {
   padding: 0.1875em 0;
+}
+
+button.text-card {
+  border: none;
+  text-align: inherit;
+  transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+  transition-property: background-color, transform;
+}
+
+button.text-card:hover,
+button.text-card:focus {
+  background-color: rgba(250, 250, 250, 0.95);
+  transform: scale(1.07);
 }

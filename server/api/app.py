@@ -68,8 +68,9 @@ def get_companies(query):
 @app.input(EmissionFactQueryInput, location='query')
 @app.output(EmissionComparisonFactOutput)
 def get_emission_comparison_fact(query):
-    fact_template, next_shuffle_key = get_fact_template(query.get('shuffle_key'))
+    fact_template, current_shuffle_key, next_shuffle_key = get_fact_template(query.get('shuffle_key'))
     return {
         'fact': fact_template.get_fact(query['emission']),
+        'current_shuffle_key': current_shuffle_key,
         'next_shuffle_key': next_shuffle_key
     }

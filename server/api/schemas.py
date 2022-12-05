@@ -73,5 +73,6 @@ class EmissionFactQueryInput(BaseSchema):
 
 class EmissionComparisonFactOutput(BaseSchema):
     fact = fields.String(required=True)
+    current_shuffle_key = fields.Integer(required=True)
     next_shuffle_key = fields.Integer(required=True)
     citations = fields.List(fields.String(), dump_default=list, required=True)

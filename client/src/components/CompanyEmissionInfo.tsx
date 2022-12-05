@@ -1,6 +1,8 @@
 import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
+import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 import { CompanyOutput } from "../api";
 import { api } from "../config";
 import { CompanyDropdown } from "./CompanyDropdown";
@@ -19,7 +21,8 @@ export const CompanyEmissionInfo: React.FunctionComponent<
   );
 
   const [currentFact, setCurrentFact] = useState<string>();
-  const [factShuffleKey, setFactShuffleKey] = useState<number>();
+  const [currentFactShuffleKey, setCurrentFactShuffleKey] = useState<number>();
+  const [nextFactShuffleKey, setNextFactShuffleKey] = useState<number>();
   const [factIsLoading, setFactIsLoading] = useState<boolean>(true);
 
   const emission = useMemo(
@@ -41,15 +44,22 @@ export const CompanyEmissionInfo: React.FunctionComponent<
     [selectedCompany]
   );
 
-  useEffect(() => {
+  function refreshFact(increment = true) {
     setFactIsLoading(true);
     api
-      .apiEmissionComparisonFactGet(emission, factShuffleKey)
-      .then(({ data: { fact, next_shuffle_key } }) => {
-        setFactShuffleKey(next_shuffle_key);
+      .apiEmissionComparisonFactGet(emission, nextFactShuffleKey)
+      .then(({ data: { fact, current_shuffle_key, next_shuffle_key } }) => {
         setCurrentFact(fact);
+        if (increment || nextFactShuffleKey === undefined) {
+          setCurrentFactShuffleKey(current_shuffle_key);
+          setNextFactShuffleKey(next_shuffle_key);
+        }
         setFactIsLoading(false);
       });
+  }
+
+  useEffect(() => {
+    refreshFact(false);
   }, [emission]);
 
   if (!selectedCompany || !selectedYear || !emission) {
@@ -79,9 +89,22 @@ export const CompanyEmissionInfo: React.FunctionComponent<
             {"."}
           </span>
         </div>
-        <div className="text-card">
-          {!factIsLoading ? <>{currentFact}</> : <></>}
-        </div>
+        <Button
+          className="text-card"
+          disabled={factIsLoading}
+          onClick={!factIsLoading ? () => refreshFact() : undefined}
+          bsPrefix="no-css"
+        >
+          {!factIsLoading ? (
+            <>{currentFact}</>
+          ) : (
+            <Spinner
+              className="initializing-spinner"
+              animation="border"
+              role="status"
+            />
+          )}
+        </Button>
       </>
     );
 };

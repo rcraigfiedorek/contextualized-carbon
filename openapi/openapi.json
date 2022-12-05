@@ -280,6 +280,9 @@
           "fact": {
             "type": "string"
           },
+          "current_shuffle_key": {
+            "type": "integer"
+          },
           "next_shuffle_key": {
             "type": "integer"
           },
@@ -292,6 +295,7 @@
         },
         "required": [
           "citations",
+          "current_shuffle_key",
           "fact",
           "next_shuffle_key"
         ]

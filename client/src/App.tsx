@@ -1,17 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
 import Spinner from "react-bootstrap/Spinner";
 import { CompanyOutput } from "./api";
 import "./App.css";
 import { CompanyEmissionInfo } from "./components/CompanyEmissionInfo";
+import { NavBar } from "./components/NavBar";
 import { api } from "./config";
-import epa from "./epa.svg";
-import github from "./github.svg";
-import logo from "./logo.svg";
-import openapi from "./openapi.svg";
 
 function App() {
   const [initCompany, setInitCompany] = useState<CompanyOutput>();
@@ -24,62 +19,7 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar expand={false} fixed="top" className="emissions-navbar">
-        <Navbar.Brand>
-          <img src={logo} className="logo" />
-          <span className="header-text">
-            Corporations pollute, not individuals.
-          </span>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbar-collapse" />
-        <Navbar.Collapse id="navbar-collapse">
-          <Nav>
-            <div className="nav-link-container">
-              <Nav.Link
-                href="/api/docs"
-                target="_blank"
-                rel="noopener noreferrer"
-                active={false}
-              >
-                API Documentation
-                <img src={openapi} className="nav-link-icon" />
-              </Nav.Link>
-            </div>
-            <div className="nav-link-container">
-              <Nav.Link
-                href="https://github.com/rcraigfiedorek/emissions-bot"
-                target="_blank"
-                rel="noopener noreferrer"
-                active={false}
-              >
-                Source code
-                <img src={github} className="nav-link-icon" />
-              </Nav.Link>
-            </div>
-            <div className="nav-link-container">
-              <Nav.Link
-                href="https://enviro.epa.gov/envirofacts/ghg"
-                target="_blank"
-                rel="noopener noreferrer"
-                active={false}
-              >
-                Source data
-                <img src={epa} className="nav-link-icon" />
-              </Nav.Link>
-            </div>
-            <div className="nav-link-container">
-              <Nav.Link
-                href="https://craigf.io"
-                target="_blank"
-                rel="noopener noreferrer"
-                active={false}
-              >
-                About the author
-              </Nav.Link>
-            </div>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <NavBar />
 
       <div className="App-body">
         {!!initCompany ? (
