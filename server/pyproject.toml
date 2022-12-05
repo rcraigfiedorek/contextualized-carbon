@@ -19,6 +19,7 @@ cloud-sql-python-connector = {extras = ["pg8000"], version = "^0.9.3"}
 cleanco = "2.2"
 google-cloud-secret-manager = "^2.12.6"
 flask-cors = "^3.0.10"
+pint = "^0.20.1"
 
 
 [tool.poetry.group.dev.dependencies]

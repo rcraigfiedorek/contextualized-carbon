@@ -1,20 +1,18 @@
 import dataclasses
-from typing import Optional
+import operator
+from typing import Callable, Optional
+
+from api.facts.quantity import Quantity, pformat, ureg
 
 
 @dataclasses.dataclass
-class ZeroDimensionalFactTemplate:
-    tco2_conversion: float
+class FactTemplate:
+    conversion: Quantity
     message: str
     citation: Optional[dict] = None
-    invert_input: bool = False
+    calc_function: Callable[[Quantity, Quantity], Quantity] = operator.mul
 
     def get_fact(self, tco2e: float) -> str:
-        if self.invert_input:
-            try:
-                numerical_result = self.tco2_conversion / tco2e
-            except ZeroDivisionError:
-                numerical_result = '__ZeroDivisionError__'
-        else:
-            numerical_result = self.tco2_conversion * tco2e
-        return self.message % (numerical_result)
+        co2_quantity = tco2e * (ureg.t * ureg.co2)
+        calc_result = self.calc_function(self.conversion, co2_quantity)
+        return self.message % (pformat(calc_result))

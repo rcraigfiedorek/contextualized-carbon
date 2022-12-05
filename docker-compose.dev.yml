@@ -27,10 +27,13 @@ services:
   client:
     depends_on:
       - server
-    build: ./client
+    build:
+      context: ./client
+      target: development
     ports:
       - "3000:3000"
-      - "80:80"
+    volumes:
+      - "./client/src:/client/src"
 
 secrets:
   postgres-password:

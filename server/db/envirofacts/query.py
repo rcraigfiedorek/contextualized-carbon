@@ -101,9 +101,9 @@ class Query:
             try:
                 response = requests.get(_url)
                 response.raise_for_status()
-            except requests.exceptions.HTTPError:
+            except (requests.exceptions.HTTPError, ValueError):
                 # Retry once on any failure
-                time.sleep(1)
+                time.sleep(5)
                 response = requests.get(_url)
                 response.raise_for_status()
             with io.StringIO() as buf:
@@ -139,7 +139,7 @@ class Query:
                     # If one format fails inexplicably for a certain page (which happens), we try the other
                     try:
                         yield get_page(start, end, fmt)
-                    except requests.exceptions.HTTPError:
+                    except (requests.exceptions.HTTPError, ValueError):
                         yield get_page(start, end, fallback_fmt)
 
             return pd.concat(pagegen(), ignore_index=True)

@@ -67,8 +67,8 @@ COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 RUN poetry install --no-root
 
 WORKDIR /server
-COPY ./api/ ./api
-COPY ./db/ ./db/
+COPY ./api ./api
+COPY ./db ./db
 EXPOSE 5000
 CMD exec gunicorn --bind :5000 --workers 4 --threads 8 --timeout 0 api:app
 

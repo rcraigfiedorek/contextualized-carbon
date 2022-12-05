@@ -5,10 +5,10 @@ import random
 from typing import ClassVar, Optional, Tuple
 
 from api.facts.instances import ALL_FACTS
-from api.facts.template import ZeroDimensionalFactTemplate
+from api.facts.template import FactTemplate
 
 
-def get_fact_template(shuffle_key: Optional[int]) -> Tuple[ZeroDimensionalFactTemplate, int]:
+def get_fact_template(shuffle_key: Optional[int]) -> Tuple[FactTemplate, int]:
     # If this key has passed through all list items, generate a new key which
     # will shuffle the list and iterate through it starting from the beginning.
     shuffle_key: ShuffleKey = ShuffleKey(shuffle_key) if shuffle_key is not None else ShuffleKey.random()

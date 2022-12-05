@@ -1,4 +1,4 @@
 from api.facts.shuffle import get_fact_template
-from api.facts.template import ZeroDimensionalFactTemplate
+from api.facts.template import FactTemplate
 
-__all__ = ['ZeroDimensionalFactTemplate', 'get_fact_template']
+__all__ = ['FactTemplate', 'get_fact_template']
