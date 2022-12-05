@@ -11,6 +11,7 @@ import { api } from "./config";
 import epa from "./epa.svg";
 import github from "./github.svg";
 import logo from "./logo.svg";
+import openapi from "./openapi.svg";
 
 function App() {
   const [initCompany, setInitCompany] = useState<CompanyOutput>();
@@ -33,6 +34,17 @@ function App() {
         <Navbar.Toggle aria-controls="navbar-collapse" />
         <Navbar.Collapse id="navbar-collapse">
           <Nav>
+            <div className="nav-link-container">
+              <Nav.Link
+                href="/api/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                active={false}
+              >
+                API Documentation
+                <img src={openapi} className="nav-link-icon" />
+              </Nav.Link>
+            </div>
             <div className="nav-link-container">
               <Nav.Link
                 href="https://github.com/rcraigfiedorek/emissions-bot"

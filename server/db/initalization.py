@@ -1,9 +1,11 @@
+import os
 import re
 
 import cleanco
+import pandas as pd
 
-from db.envirofacts import Query
 from db.connection import db
+from db.envirofacts import Query
 from db.models import CompanyModel, EmissionsModel
 
 
@@ -12,10 +14,23 @@ def create_tables():
     db.create_all()
 
 
-def pull_envirofacts_data():
-    data = Query('pub_dim_facility')\
+def get_envirofacts_data() -> pd.DataFrame:
+    return Query('pub_dim_facility')\
         .table('pub_facts_sector_ghg_emission')\
         .get(fmt='json', pagesize=1000)
+
+
+def pull_envirofacts_data(file_path: str):
+    get_envirofacts_data().to_csv(file_path, index=False)
+
+
+def load_envirofacts_data(csv_file: str | None = None):
+    if csv_file:
+        if not os.path.exists(csv_file):
+            pull_envirofacts_data(csv_file)
+        data = pd.read_csv(csv_file)
+    else:
+        data = get_envirofacts_data()
 
     companies = data.parent_company\
         .str.split(r';\s*', regex=True, expand=True)\

@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { MutableRefObject, useRef, useState } from "react";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import { CompanyOutput } from "../api";
 import { api } from "../config";
@@ -18,6 +18,7 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
   setSelectedCompany,
   typeaheadClassNames,
 }) => {
+  const ref = useRef(null) as MutableRefObject<any>;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [options, setOptions] = useState<CompanyOutput[]>([]);
 
@@ -42,6 +43,7 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
 
   return (
     <AsyncTypeahead
+      ref={ref}
       className={classNames(typeaheadClassNames, "company-dropdown")}
       filterBy={() => true}
       id="async-example"
@@ -50,6 +52,11 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
       minLength={3}
       defaultSelected={[selectedCompany]}
       onSearch={handleSearch}
+      onBlur={() => {
+        ref.current!!.state.selected = [selectedCompany];
+        ref.current!!.state.showMenu = false;
+      }}
+      placeholder="Type to search..."
       onChange={(selected) => {
         const newCompany = _.head(selected) as CompanyOutput;
         if (newCompany) {
