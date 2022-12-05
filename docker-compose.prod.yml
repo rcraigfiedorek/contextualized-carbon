@@ -1,9 +1,13 @@
 version: "3.9"
 services:
+  db:
+    image: postgres:15.1-bullseye
+    environment:
+      - POSTGRES_PASSWORD=${EMISSIONS_DB_PASSWORD}
   server:
     image: rcraigfiedorek/emissions-bot:server
-    secrets:
-      - google_application_credentials
+    environment:
+      - EMISSIONS_DB_PASSWORD=${EMISSIONS_DB_PASSWORD}
   client:
     depends_on:
       - server

@@ -7,7 +7,12 @@ from db.connection import db
 from db.models import CompanyModel, EmissionsModel
 
 
-def envirofacts_pipeline():
+def create_tables():
+    db.drop_all()
+    db.create_all()
+
+
+def pull_envirofacts_data():
     data = Query('pub_dim_facility')\
         .table('pub_facts_sector_ghg_emission')\
         .get(fmt='json', pagesize=1000)
@@ -35,9 +40,6 @@ def envirofacts_pipeline():
         all_facility_emissions=('co2e_emission', 'sum'),
         fully_owned_emissions=('co2e_emission_owned', 'sum')
     )
-
-    db.drop_all()
-    db.create_all()
 
     for company_name in grouped_data.index.levels[0]:
         emissions = [

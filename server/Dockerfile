@@ -55,7 +55,8 @@ RUN poetry install --only main --no-root
 
 # `development` image is used during development / testing
 FROM python-base as development
-ENV FASTAPI_ENV=development
+ENV APP_ENV=development
+ENV FLASK_APP=api
 WORKDIR $PYSETUP_PATH
 
 # copy in our built poetry + venv
@@ -74,7 +75,8 @@ CMD exec gunicorn --bind :5000 --workers 4 --threads 8 --timeout 0 api:app
 
 # `production` image used for runtime
 FROM python-base as production
-ENV FASTAPI_ENV=production
+ENV APP_ENV=production
+ENV FLASK_APP=api
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 WORKDIR /server
 COPY ./api/ ./api

@@ -1,4 +1,4 @@
-FROM node:18-alpine as base
+FROM node:18-alpine as build-step
 
 WORKDIR /client
 ENV PATH /client/node_modules/.bin:$PATH

@@ -4,6 +4,7 @@ import dataclasses
 import io
 import logging
 import sys
+import time
 from typing import Iterable, List, Literal
 
 import pandas as pd
@@ -96,14 +97,20 @@ class Query:
         return self
 
     def get(self, pagesize: int | None = None, fmt: Literal['json', 'csv'] = 'json') -> pd.DataFrame:
-        def url_to_df(_url: str) -> pd.DataFrame:
-            response = requests.get(_url)
-            response.raise_for_status()
+        def url_to_df(_url: str, _fmt: Literal['json', 'csv']) -> pd.DataFrame:
+            try:
+                response = requests.get(_url)
+                response.raise_for_status()
+            except requests.exceptions.HTTPError:
+                # Retry once on any failure
+                time.sleep(1)
+                response = requests.get(_url)
+                response.raise_for_status()
             with io.StringIO() as buf:
                 buf.write(response.text)
                 buf.seek(0)
                 try:
-                    if fmt == 'json':
+                    if _fmt == 'json':
                         df = pd.read_json(buf, typ='frame')
                     else:
                         df = pd.read_csv(buf)
@@ -114,19 +121,31 @@ class Query:
                           df.shape[0], df.shape[1], _url)
             return df
 
+        def get_page(_start: int, _end: int, _fmt: Literal['json', 'csv']) -> pd.DataFrame:
+            url = self.url(start=_start, end=_end, fmt=_fmt)
+            return url_to_df(url, _fmt)
+
+        fallback_fmt = 'csv' if fmt == 'json' else 'json'
+
         if pagesize is not None:
             count = self.count()
 
             def pagegen() -> Iterable[pd.DataFrame]:
                 for i in range(0, count, pagesize):
                     # Envirofact's row indices begin at 0, and row queries are both start-inclusive and end-inclusive
-                    page_url = self.url(start=i, end=i+pagesize-1, fmt=fmt)
-                    yield url_to_df(page_url)
+                    start = i
+                    end = i + pagesize - 1
+
+                    # If one format fails inexplicably for a certain page (which happens), we try the other
+                    try:
+                        yield get_page(start, end, fmt)
+                    except requests.exceptions.HTTPError:
+                        yield get_page(start, end, fallback_fmt)
 
             return pd.concat(pagegen(), ignore_index=True)
 
         else:
-            return url_to_df(self.url(fmt=fmt))
+            return url_to_df(self.url(fmt=fmt), fmt)
 
 
 @dataclasses.dataclass

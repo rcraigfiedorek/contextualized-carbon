@@ -1,32 +1,17 @@
-import pg8000
 from flask_sqlalchemy import SQLAlchemy
-from google.cloud.sql.connector import Connector, IPTypes
 
-from db.secrets import get_secret_value
+from db.secrets import get_db_password
 
-PROJECT_ID = 'delta-timer-368701'
-DB_ZONE = 'us-central1'
+DB_DRIVER = 'postgresql+pg8000'
+DB_HOST = 'db'
+DB_PORT = '5432'
 DB_NAME = 'corporate-emissions'
 DB_USER = 'postgres'
-DB_CONNECTION_NAME = f'{PROJECT_ID}:{DB_ZONE}:{DB_NAME}'
-DB_PASSWORD = get_secret_value('EMISSIONS_DB_PASSWORD')
-
-
-def getconn() -> pg8000.dbapi.Connection:
-    with Connector() as connector:
-        return connector.connect(
-            DB_CONNECTION_NAME,
-            "pg8000",
-            user=DB_USER,
-            password=DB_PASSWORD,
-            db=DB_NAME,
-            enable_iam_auth=True,
-            ip_type=IPTypes.PUBLIC
-        )
-
+DB_PASSWORD = get_db_password()
+DB_URL = f'{DB_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
 db = SQLAlchemy(engine_options=dict(
-    creator=getconn,
+    url=DB_URL,
     pool_size=5,
     max_overflow=2,
     pool_timeout=30,

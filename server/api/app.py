@@ -1,3 +1,5 @@
+import os
+
 from apiflask import APIFlask, pagination_builder
 from flask.cli import AppGroup
 from flask_cors import CORS
@@ -5,18 +7,23 @@ from flask_cors import CORS
 from api.facts import get_fact_template
 from api.schemas import (CompanyListOutput, CompanyOutput, CompanyQueryInput,
                          EmissionComparisonFactOutput, EmissionFactQueryInput)
-from db import CompanyModel, EmissionsModel, db, envirofacts_pipeline
+from db import (CompanyModel, EmissionsModel, create_tables, db,
+                pull_envirofacts_data)
 
 app = APIFlask(__name__, openapi_blueprint_url_prefix='/api')
 app.config.from_mapping(
-    SQLALCHEMY_DATABASE_URI='postgresql+pg8000://',
+    ENVIRONMENT=os.getenv('APP_ENV', 'production')
 )
 db.init_app(app)
-CORS(origins=['http://localhost:3000']).init_app(app)
+
+if app.config['ENVIRONMENT'] == 'development':
+    CORS(origins=['http://localhost:3000']).init_app(app)
 
 
 db_cli = AppGroup('db')
-db_cli.command('init')(envirofacts_pipeline)
+db_cli
+db_cli.command('create')(create_tables)
+db_cli.command('seed')(pull_envirofacts_data)
 app.cli.add_command(db_cli)
 
 app.logger.setLevel('INFO')
