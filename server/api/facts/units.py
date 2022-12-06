@@ -70,6 +70,10 @@ class PrettyUnit:
         if 0.1 <= m < 1_000:
             formatted_number = np.format_float_positional(m, precision=2, min_digits=2)
             use_plural = True
+        elif m == 0:
+            formatted_number = '0'
+        elif m < 0:
+            raise ValueError('Negative values not supported')
         else:
             formatted_number = PrettyUnit.unitless.pformat(m * ureg.one)
             use_plural = 'of a' not in formatted_number

@@ -24,7 +24,7 @@ class CompanyCleanseResult:
 
     @property
     def canonical_name(self):
-        return self.matching_names.most_common(1)[0]
+        return self.matching_names.most_common(1)[0][0]
 
     @staticmethod
     def merge(results: Iterable[CompanyCleanseResult]) -> CompanyCleanseResult:
@@ -57,21 +57,25 @@ class CompanySharedPrefixAggregator:
         self.clean_names[clean_name].matching_indices.add(index)
         self.clean_names[clean_name].matching_names[dirty_name] += 1
 
-    def aggregate(self) -> Dict[int, str]:
-        buckets: Dict[Tuple[str, ...], CompanyCleanseResult] = dict()
-        for clean_name, cleanse_result in list(self.clean_names.items()):
-            names_to_merge = list()
-            results_to_merge = [cleanse_result]
-            for bucket_names, bucket_result in buckets.items():
-                if any(self.are_similar(clean_name, bucket_name) for bucket_name in bucket_names):
-                    names_to_merge.extend(bucket_names)
-                    results_to_merge.append(bucket_result)
-                    buckets.pop(bucket_names)
-            names_to_merge.sort()
-            buckets[tuple(names_to_merge)] = CompanyCleanseResult.merge(results_to_merge)
+    def aggregate(self, merge_similar=True) -> Dict[int, str]:
+        if merge_similar:
+            buckets: Dict[Tuple[str, ...], CompanyCleanseResult] = dict()
+            for clean_name, cleanse_result in self.clean_names.items():
+                names_to_merge = [clean_name]
+                results_to_merge = [cleanse_result]
+                for bucket_names, bucket_result in list(buckets.items()):
+                    if any(self.are_similar(clean_name, bucket_name) for bucket_name in bucket_names):
+                        names_to_merge.extend(bucket_names)
+                        results_to_merge.append(bucket_result)
+                        buckets.pop(bucket_names)
+                names_to_merge.sort()
+                buckets[tuple(names_to_merge)] = CompanyCleanseResult.merge(results_to_merge)
+            results = buckets.values()
+        else:
+            results = self.clean_names.values()
 
         output = dict()
-        for result in buckets.values():
+        for result in results:
             output.update(dict.fromkeys(result.matching_indices, result.canonical_name))
         return output
 
@@ -112,6 +116,7 @@ class CompanyAggregator:
 
     def aggregate(self) -> Dict[int, str]:
         output = dict()
-        for prefix_aggregator in self.prefix_aggregators.values():
-            output.update(prefix_aggregator.aggregate())
+        for prefix, prefix_aggregator in self.prefix_aggregators.items():
+            merge_similar = len(prefix) == SHARED_PREFIX_LENGTH_SIMILARITY_PRECONDITION
+            output.update(prefix_aggregator.aggregate(merge_similar=merge_similar))
         return output

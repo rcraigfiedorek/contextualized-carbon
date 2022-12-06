@@ -72,4 +72,5 @@ def clean_envirofacts_data(data: pd.DataFrame) -> pd.DataFrame:
         all_facility_emissions=('co2e_emission', 'sum'),
         fully_owned_emissions=('co2e_emission_owned', 'sum')
     )
+    grouped_data = grouped_data.loc[grouped_data.facility_count != 0]
     return grouped_data
