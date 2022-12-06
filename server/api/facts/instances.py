@@ -140,8 +140,8 @@ carpet_fact = SingleVarFactTemplate(
 ALL_FACTS.append(carpet_fact)
 
 
-DEATHS_PER_EMISSION_LOWER = 0.171 * ureg.thousandth / (ureg.t * ureg.co2)
-DEATHS_PER_EMISSION_UPPER = 0.678 * ureg.thousandth / (ureg.t * ureg.co2)
+DEATHS_PER_EMISSION_LOWER = 1.71e-4 / (ureg.t * ureg.co2)
+DEATHS_PER_EMISSION_UPPER = 6.78e-4 / (ureg.t * ureg.co2)
 death_fact = FactTemplate(
     conversions=[
         DEATHS_PER_EMISSION_LOWER,

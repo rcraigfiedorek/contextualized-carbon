@@ -90,6 +90,43 @@
         "summary": "Get Companies"
       }
     },
+    "/api/format-quantity": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "quantity",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormatQuantityOutput"
+                }
+              }
+            },
+            "description": "Successful response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            },
+            "description": "Validation error"
+          }
+        },
+        "summary": "Get Formatted Quantity"
+      }
+    },
     "/api/emissionComparisonFact": {
       "get": {
         "parameters": [
@@ -273,6 +310,14 @@
         "required": [
           "companies"
         ]
+      },
+      "FormatQuantityOutput": {
+        "type": "object",
+        "properties": {
+          "formatted_quantity": {
+            "type": "string"
+          }
+        }
       },
       "EmissionComparisonFactOutput": {
         "type": "object",

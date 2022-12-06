@@ -149,6 +149,19 @@ export interface EmissionComparisonFactOutput {
 /**
  * 
  * @export
+ * @interface FormatQuantityOutput
+ */
+export interface FormatQuantityOutput {
+    /**
+     * 
+     * @type {string}
+     * @memberof FormatQuantityOutput
+     */
+    'formatted_quantity'?: string;
+}
+/**
+ * 
+ * @export
  * @interface HTTPError
  */
 export interface HTTPError {
@@ -353,6 +366,41 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Get Formatted Quantity
+         * @param {string} [quantity] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiFormatQuantityGet: async (quantity?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/format-quantity`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (quantity !== undefined) {
+                localVarQueryParameter['quantity'] = quantity;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -402,6 +450,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiEmissionComparisonFactGet(emission, shuffleKey, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Get Formatted Quantity
+         * @param {string} [quantity] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiFormatQuantityGet(quantity?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FormatQuantityOutput>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiFormatQuantityGet(quantity, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -447,6 +506,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, options?: any): AxiosPromise<EmissionComparisonFactOutput> {
             return localVarFp.apiEmissionComparisonFactGet(emission, shuffleKey, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get Formatted Quantity
+         * @param {string} [quantity] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiFormatQuantityGet(quantity?: string, options?: any): AxiosPromise<FormatQuantityOutput> {
+            return localVarFp.apiFormatQuantityGet(quantity, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -498,6 +567,18 @@ export class DefaultApi extends BaseAPI {
      */
     public apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).apiEmissionComparisonFactGet(emission, shuffleKey, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get Formatted Quantity
+     * @param {string} [quantity] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiFormatQuantityGet(quantity?: string, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).apiFormatQuantityGet(quantity, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

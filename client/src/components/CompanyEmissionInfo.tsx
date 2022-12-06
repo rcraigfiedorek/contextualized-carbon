@@ -24,6 +24,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
   const [currentFactShuffleKey, setCurrentFactShuffleKey] = useState<number>();
   const [nextFactShuffleKey, setNextFactShuffleKey] = useState<number>();
   const [factIsLoading, setFactIsLoading] = useState<boolean>(true);
+  const [formattedEmission, setFormattedEmission] = useState<string>();
 
   const emission = useMemo(
     () =>
@@ -34,6 +35,14 @@ export const CompanyEmissionInfo: React.FunctionComponent<
       ]),
     [selectedCompany, selectedYear]
   );
+
+  useEffect(() => {
+    api
+      .apiFormatQuantityGet(`${emission} t`)
+      .then(({ data: { formatted_quantity } }) => {
+        setFormattedEmission(formatted_quantity);
+      });
+  }, [emission]);
 
   const yearOptions = useMemo(
     () =>
@@ -63,7 +72,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
     refreshFact(false);
   }, [emission]);
 
-  if (!selectedCompany || !selectedYear || !emission) {
+  if (!selectedCompany || !selectedYear || !formattedEmission) {
     return <></>;
   } else
     return (
@@ -85,7 +94,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
             typeaheadClassNames="inline-block"
           />
           <span>
-            {` reported emissions equivalent to at least ${emission} tonnes of CO`}
+            {` reported emissions equivalent to at least ${formattedEmission} of CO`}
             <sub>{"2"}</sub>
             {"."}
           </span>

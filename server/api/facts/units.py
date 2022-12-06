@@ -68,7 +68,7 @@ class PrettyUnit:
                 if (q >= (1 * self.fallback_punit.unit)):
                     return self.fallback_punit.pformat(q)
         if 0.1 <= m < 1_000:
-            formatted_number = np.format_float_positional(m, precision=2)
+            formatted_number = np.format_float_positional(m, precision=2, min_digits=2)
             use_plural = True
         else:
             formatted_number = PrettyUnit.unitless.pformat(m * ureg.one)
@@ -122,12 +122,26 @@ PFORMAT_SUPPORTED_DIMENSIONS: Dict[pint.util.UnitsContainer, PrettyUnit] = {
         PrettyUnit(ureg.mL, 'milliliter'),
         PrettyUnit(ureg.L, 'liter'),
         PrettyUnit(ureg.km ** 3, 'cubic kilometer')
+    ),
+    ureg.UnitsContainer({'[mass]': 1}): PrettyUnit.of(
+        PrettyUnit(ureg.mg, 'milligram'),
+        PrettyUnit(ureg.g, 'gram'),
+        PrettyUnit(ureg.kg, 'kilogram'),
+        PrettyUnit(ureg.t, 'tonne'),
+        PrettyUnit(ureg.kilotonne, 'kilotonne'),
+        PrettyUnit(ureg.Mt, 'megatonne'),
+        PrettyUnit(ureg.Gt, 'gigatonne')
     )
 }
 
 
-def pformat(q: Quantity) -> str:
+def pformat(q: Quantity | str) -> str:
     d = q.dimensionality
     if d not in PFORMAT_SUPPORTED_DIMENSIONS:
         raise ValueError(f'Unsupported dimensionality: {d}')
     return PFORMAT_SUPPORTED_DIMENSIONS[d].pformat(q)
+
+
+def format_quantity_string(q: str) -> str:
+    parsed = Quantity(q)
+    return pformat(parsed)

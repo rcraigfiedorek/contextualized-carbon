@@ -1353,6 +1353,17 @@ python-versions = "*"
 pyasn1 = ">=0.4.6,<0.5.0"
 
 [[package]]
+name = "pybind11"
+version = "2.10.1"
+description = "Seamless operability between C++11 and Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+global = ["pybind11-global (==2.10.1)"]
+
+[[package]]
 name = "pycodestyle"
 version = "2.9.1"
 description = "Python style guide checker"
@@ -1386,6 +1397,17 @@ python-versions = ">=3.6"
 
 [package.extras]
 plugins = ["importlib-metadata"]
+
+[[package]]
+name = "pylcs"
+version = "0.0.7"
+description = "super fast cpp implementation of longest common subsequence"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pybind11 = ">=2.2"
 
 [[package]]
 name = "pyparsing"
@@ -1805,7 +1827,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "a5ae8200197cb04f6558db505d09bbc0ed8b32ef72e5341cc24ef5f99b457e82"
+content-hash = "6dcde2bac23dca8942c08720342d00a6f93b161da58393193620e3a48f1564de"
 
 [metadata.files]
 aiohttp = [
@@ -2758,6 +2780,10 @@ pyasn1-modules = [
     {file = "pyasn1-modules-0.2.8.tar.gz", hash = "sha256:905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e"},
     {file = "pyasn1_modules-0.2.8-py2.py3-none-any.whl", hash = "sha256:a50b808ffeb97cb3601dd25981f6b016cbb3d31fbf57a8b8a87428e6158d0c74"},
 ]
+pybind11 = [
+    {file = "pybind11-2.10.1-py3-none-any.whl", hash = "sha256:ebf3eeac46859a2e10077ae45378ba3f33d999a9064697a3464fba1a4a04fc0a"},
+    {file = "pybind11-2.10.1.tar.gz", hash = "sha256:c9571b8a6607c8e90ea156a2a455383b9911f89da414e9f5e251ab58dc3e3c71"},
+]
 pycodestyle = [
     {file = "pycodestyle-2.9.1-py2.py3-none-any.whl", hash = "sha256:d1735fc58b418fd7c5f658d28d943854f8a849b01a5d0a1e6f3f3fdd0166804b"},
     {file = "pycodestyle-2.9.1.tar.gz", hash = "sha256:2c9607871d58c76354b697b42f5d57e1ada7d261c261efac224b664affdc5785"},
@@ -2773,6 +2799,10 @@ pyflakes = [
 pygments = [
     {file = "Pygments-2.13.0-py3-none-any.whl", hash = "sha256:f643f331ab57ba3c9d89212ee4a2dabc6e94f117cf4eefde99a0574720d14c42"},
     {file = "Pygments-2.13.0.tar.gz", hash = "sha256:56a8508ae95f98e2b9bdf93a6be5ae3f7d8af858b43e02c5a2ff083726be40c1"},
+]
+pylcs = [
+    {file = "pylcs-0.0.7-cp37-cp37m-win_amd64.whl", hash = "sha256:bf3b70fa3412a998a97d68c4358563bfc61cf2ccd7b67d02ff001d10db804d7a"},
+    {file = "pylcs-0.0.7.tar.gz", hash = "sha256:c13937ee7d153cf1ad03f0d208c5a46f1349037b3d9bd773340c6b1a60272aae"},
 ]
 pyparsing = [
     {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},

@@ -68,7 +68,7 @@ class CompanyQueryInput(PaginationInput):
 
 class EmissionFactQueryInput(BaseSchema):
     emission = fields.Float(required=True)
-    shuffle_key = fields.Integer(required=False, allow_none=True)
+    shuffle_key = fields.Integer(required=False)
 
 
 class EmissionComparisonFactOutput(BaseSchema):
@@ -76,3 +76,11 @@ class EmissionComparisonFactOutput(BaseSchema):
     current_shuffle_key = fields.Integer(required=True)
     next_shuffle_key = fields.Integer(required=True)
     citations = fields.List(fields.String(), dump_default=list, required=True)
+
+
+class FormatQuantityQueryInput(BaseSchema):
+    quantity = fields.String(require=True)
+
+
+class FormatQuantityOutput(BaseSchema):
+    formatted_quantity = fields.String(require=True)

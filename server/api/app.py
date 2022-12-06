@@ -5,9 +5,10 @@ from apiflask import APIFlask, pagination_builder
 from flask.cli import AppGroup
 from flask_cors import CORS
 
-from api.facts import get_fact_template
+from api.facts import format_quantity_string, get_fact_template
 from api.schemas import (CompanyListOutput, CompanyOutput, CompanyQueryInput,
-                         EmissionComparisonFactOutput, EmissionFactQueryInput)
+                         EmissionComparisonFactOutput, EmissionFactQueryInput,
+                         FormatQuantityOutput, FormatQuantityQueryInput)
 from db import (CompanyModel, EmissionsModel, create_tables, db,
                 load_envirofacts_data)
 
@@ -73,4 +74,13 @@ def get_emission_comparison_fact(query):
         'fact': fact_template.get_fact(query['emission']),
         'current_shuffle_key': current_shuffle_key,
         'next_shuffle_key': next_shuffle_key
+    }
+
+
+@app.get('/api/format-quantity')
+@app.input(FormatQuantityQueryInput, location='query')
+@app.output(FormatQuantityOutput)
+def get_formatted_quantity(query):
+    return {
+        'formatted_quantity': format_quantity_string(query['quantity'])
     }
