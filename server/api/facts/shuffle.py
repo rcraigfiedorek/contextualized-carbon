@@ -52,7 +52,7 @@ class ShuffleKey:
 
     @staticmethod
     def of(seed: int, index: int) -> ShuffleKey:
-        return ShuffleKey((seed << 8) & index)
+        return ShuffleKey((seed << 8) | index)
 
     @staticmethod
     def random() -> ShuffleKey:

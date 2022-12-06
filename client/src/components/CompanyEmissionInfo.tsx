@@ -46,8 +46,9 @@ export const CompanyEmissionInfo: React.FunctionComponent<
 
   function refreshFact(increment = true) {
     setFactIsLoading(true);
+    const shuffleKey = increment ? nextFactShuffleKey : currentFactShuffleKey;
     api
-      .apiEmissionComparisonFactGet(emission, nextFactShuffleKey)
+      .apiEmissionComparisonFactGet(emission, shuffleKey)
       .then(({ data: { fact, current_shuffle_key, next_shuffle_key } }) => {
         setCurrentFact(fact);
         if (increment || nextFactShuffleKey === undefined) {

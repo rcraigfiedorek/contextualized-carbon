@@ -27,6 +27,7 @@
 - CCUS and DAC
     - [44 MtCO<sub>2</sub> captured and used in 2021](https://www.iea.org/fuels-and-technologies/carbon-capture-utilisation-and-storage)
     - [0.01 MtCO<sub>2</sub>/yr currently captured from DAC technology](https://www.iea.org/reports/direct-air-capture-2022)
+- [Mortality cost of carbon is 1.71e-4 to 6.78e-4 deaths / tCO<sub>2</sub>](https://www.nature.com/articles/s41467-021-24487-w)
 
 
 
