@@ -7,24 +7,65 @@ import { CompanyOutput } from "../api";
 import { api } from "../config";
 import { CompanyDropdown } from "./CompanyDropdown";
 
-interface CompanyEmissionInfoProps {
-  initialCompany: CompanyOutput;
-}
+interface CompanyEmissionInfoProps {}
 
 export const CompanyEmissionInfo: React.FunctionComponent<
   CompanyEmissionInfoProps
-> = ({ initialCompany }) => {
-  const [selectedCompany, setSelectedCompany] =
-    useState<CompanyOutput>(initialCompany);
-  const [selectedYear, setSelectedYear] = useState<string>(
-    _.chain(selectedCompany.emissions_by_year).keys().max().value()
-  );
+> = () => {
+  const availableYears = _.map(_.range(2010, 2022), _.toString);
+  const initialYear = "2021";
 
+  const [selectedCompany, setSelectedCompany] = useState<CompanyOutput>();
+  const [selectedYear, setSelectedYear] = useState<string>(initialYear);
   const [currentFact, setCurrentFact] = useState<string>();
   const [currentFactShuffleKey, setCurrentFactShuffleKey] = useState<number>();
   const [nextFactShuffleKey, setNextFactShuffleKey] = useState<number>();
+  const [companyIsLoading, setCompanyIsLoading] = useState<boolean>(true);
+  const [emissionIsLoading, setEmissionIsLoading] = useState<boolean>(true);
   const [factIsLoading, setFactIsLoading] = useState<boolean>(true);
   const [formattedEmission, setFormattedEmission] = useState<string>();
+  const [worstOffenders, setWorstOffenders] = useState<{
+    [year: string]: number[];
+  }>();
+
+  useEffect(() => {
+    const pulledWorstOffenders: {
+      [year: string]: number[];
+    } = {};
+    Promise.all(
+      _.map(availableYears, (year) =>
+        api
+          .apiCompaniesGet(
+            1,
+            40,
+            undefined,
+            _.parseInt(year),
+            "fully_owned_emissions",
+            _.parseInt(year)
+          )
+          .then(({ data: { companies } }) => _.map(companies, "id"))
+      )
+    ).then((companyIdArrays) => {
+      setWorstOffenders(_.fromPairs(_.zip(availableYears, companyIdArrays)));
+    });
+  }, []);
+
+  const fetchWorstOffender = (year?: string) => {
+    setCompanyIsLoading(true);
+    const fetchYear = year || _.sample(availableYears);
+    const fetchId = _.sample(_.get(worstOffenders, fetchYear!!));
+    return fetchId
+      ? api.apiCompaniesCompanyIdGet(fetchId).then(({ data }) => {
+          setSelectedCompany(data);
+          setSelectedYear(fetchYear!!);
+          setCompanyIsLoading(false);
+        })
+      : Promise.reject();
+  };
+
+  useEffect(() => {
+    fetchWorstOffender();
+  }, [worstOffenders]);
 
   const emission = useMemo(
     () =>
@@ -37,11 +78,15 @@ export const CompanyEmissionInfo: React.FunctionComponent<
   );
 
   useEffect(() => {
-    api
-      .apiFormatQuantityGet(`${emission} t`)
-      .then(({ data: { formatted_quantity } }) => {
-        setFormattedEmission(formatted_quantity);
-      });
+    setEmissionIsLoading(true);
+    if (emission !== undefined) {
+      api
+        .apiFormatQuantityGet(`${emission} t`)
+        .then(({ data: { formatted_quantity } }) => {
+          setFormattedEmission(formatted_quantity);
+          setEmissionIsLoading(false);
+        });
+    }
   }, [emission]);
 
   const yearOptions = useMemo(
@@ -53,7 +98,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
     [selectedCompany]
   );
 
-  function refreshFact(increment = true) {
+  const refreshFact = (increment = true) => {
     setFactIsLoading(true);
     const shuffleKey = increment ? nextFactShuffleKey : currentFactShuffleKey;
     api
@@ -66,60 +111,73 @@ export const CompanyEmissionInfo: React.FunctionComponent<
         }
         setFactIsLoading(false);
       });
-  }
+  };
 
   useEffect(() => {
-    refreshFact(false);
+    if (emission !== undefined) {
+      refreshFact(false);
+    }
   }, [emission]);
 
-  if (!selectedCompany || !selectedYear || !formattedEmission) {
-    return <></>;
-  } else
-    return (
-      <>
-        <Button
-          className="text-card"
-          // disabled={factIsLoading}
-          // onClick={!factIsLoading ? () => refreshFact() : undefined}
-          bsPrefix="no-css"
-        >
-          <span>{"In "}</span>
-          <Form.Select
-            className="year-select inline-block"
-            value={selectedYear}
-            onChange={(event) => setSelectedYear(event.target.value)}
-          >
-            {yearOptions}
-          </Form.Select>
-          <span>{", facilities in the US owned by "}</span>
-          <CompanyDropdown
-            yearFilter={selectedYear}
-            setSelectedCompany={setSelectedCompany}
-            selectedCompany={selectedCompany}
-            typeaheadClassNames="inline-block"
-          />
-          <span>
-            {` reported emissions equivalent to at least ${formattedEmission} of CO`}
-            <sub>{"2"}</sub>
-            {"."}
-          </span>
-        </Button>
-        <Button
-          className="text-card"
-          disabled={factIsLoading}
-          onClick={!factIsLoading ? () => refreshFact() : undefined}
-          bsPrefix="no-css"
-        >
-          {!factIsLoading ? (
-            <>{currentFact}</>
-          ) : (
-            <Spinner
-              className="initializing-spinner"
-              animation="border"
-              role="status"
+  const topCardLoading =
+    companyIsLoading || emissionIsLoading || !selectedCompany;
+  const bottomCardLoading = topCardLoading || factIsLoading;
+
+  return (
+    <>
+      <Button
+        className="text-card"
+        disabled={topCardLoading}
+        onClick={!topCardLoading ? () => fetchWorstOffender() : undefined}
+        bsPrefix="no-css"
+      >
+        {!topCardLoading ? (
+          <>
+            <span>{"In "}</span>
+            <Form.Select
+              className="year-select inline-block"
+              value={selectedYear}
+              onChange={(event) => setSelectedYear(event.target.value)}
+            >
+              {yearOptions}
+            </Form.Select>
+            <span>{", facilities in the US owned by "}</span>
+            <CompanyDropdown
+              yearFilter={selectedYear}
+              setSelectedCompany={setSelectedCompany}
+              selectedCompany={selectedCompany}
+              typeaheadClassNames="inline-block"
             />
-          )}
-        </Button>
-      </>
-    );
+            <span>
+              {` reported emissions equivalent to at least ${formattedEmission} of CO`}
+              <sub>{"2"}</sub>
+              {"."}
+            </span>
+          </>
+        ) : (
+          <Spinner
+            className="initializing-spinner"
+            animation="border"
+            role="status"
+          />
+        )}
+      </Button>
+      <Button
+        className="text-card"
+        disabled={bottomCardLoading}
+        onClick={!bottomCardLoading ? () => refreshFact() : undefined}
+        bsPrefix="no-css"
+      >
+        {!bottomCardLoading ? (
+          <>{currentFact}</>
+        ) : (
+          <Spinner
+            className="initializing-spinner"
+            animation="border"
+            role="status"
+          />
+        )}
+      </Button>
+    </>
+  );
 };

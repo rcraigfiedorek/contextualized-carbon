@@ -57,7 +57,7 @@
 }
 
 .App-body {
-  text-align: justify;
+  text-align: left;
   display: flex;
   flex-direction: column;
   align-items: center;

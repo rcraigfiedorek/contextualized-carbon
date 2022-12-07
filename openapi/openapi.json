@@ -255,7 +255,7 @@
             "type": "string"
           },
           "id": {
-            "type": "string"
+            "type": "integer"
           },
           "emissions_by_year": {}
         },

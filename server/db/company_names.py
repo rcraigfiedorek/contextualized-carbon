@@ -24,7 +24,12 @@ class CompanyCleanseResult:
 
     @property
     def canonical_name(self):
-        return self.matching_names.most_common(1)[0][0]
+        names_by_frequency = self.matching_names.most_common()
+        for name, _ in names_by_frequency:
+            # Use most common non-uppercase name if it exists
+            if not name.isupper():
+                return name
+        return names_by_frequency[0][0]
 
     @staticmethod
     def merge(results: Iterable[CompanyCleanseResult]) -> CompanyCleanseResult:

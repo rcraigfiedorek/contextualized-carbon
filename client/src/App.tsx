@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import Spinner from "react-bootstrap/Spinner";
 import { CompanyOutput } from "./api";
 import "./App.css";
 import { CompanyEmissionInfo } from "./components/CompanyEmissionInfo";
@@ -22,15 +21,7 @@ function App() {
       <NavBar />
 
       <div className="App-body">
-        {!!initCompany ? (
-          <CompanyEmissionInfo initialCompany={initCompany} />
-        ) : (
-          <Spinner
-            className="initializing-spinner"
-            animation="border"
-            role="status"
-          />
-        )}
+        <CompanyEmissionInfo />
       </div>
     </div>
   );

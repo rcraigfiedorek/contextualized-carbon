@@ -148,8 +148,8 @@ death_fact = FactTemplate(
         DEATHS_PER_EMISSION_UPPER
     ],
     message=(
-        'Current research estimates that this quantity of carbon emissions '
-        'will directly cause at least %s human deaths and up to %s human deaths.'
+        'Current research estimates that these emissions alone will directly '
+        'cause at least %s human deaths and up to %s human deaths.'
     )
 )
 ALL_FACTS.append(death_fact)

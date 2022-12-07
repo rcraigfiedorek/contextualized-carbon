@@ -104,10 +104,10 @@ export interface CompanyOutput {
     'name': string;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof CompanyOutput
      */
-    'id': string;
+    'id': number;
     /**
      * 
      * @type {any}

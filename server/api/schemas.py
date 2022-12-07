@@ -16,7 +16,7 @@ class EmissionsYearOutput(BaseSchema):
 
 class CompanyOutput(BaseSchema):
     name = fields.String(required=True)
-    id = fields.String(required=True)
+    id = fields.Integer(required=True)
     emissions_by_year = fields.Mapping(
         keys=fields.Integer(as_string=True),
         values=fields.Nested(EmissionsYearOutput()),

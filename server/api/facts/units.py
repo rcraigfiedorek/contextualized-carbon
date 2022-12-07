@@ -58,30 +58,53 @@ class PrettyUnit:
             raise ValueError('Expected non-empty iterable')
         return first
 
-    def pformat(self, q: Quantity) -> str:
+    @property
+    def is_dimensionless(self):
+        return self.unit.dimensionality == ureg.UnitsContainer({})
+
+    @property
+    def is_fraction(self):
+        return self.is_dimensionless and (0 < (1 * self.unit).to(ureg.one).m < 1)
+
+    def pformat(self, q: Quantity, _recursive_depth: int = 0) -> str:
         m = q.to(self.unit).m
         if self.fallback_punit is not None:
             if self.threshold is not None:
                 if (m >= self.threshold):
-                    return self.fallback_punit.pformat(q)
+                    return self.fallback_punit.pformat(q, _recursive_depth=_recursive_depth)
             else:
                 if (q >= (1 * self.fallback_punit.unit)):
-                    return self.fallback_punit.pformat(q)
+                    return self.fallback_punit.pformat(q, _recursive_depth=_recursive_depth)
         if 0.1 <= m < 1_000:
             formatted_number = np.format_float_positional(m, precision=2, min_digits=2)
             use_plural = True
+            if self.is_dimensionless and not self.is_fraction and _recursive_depth <= 1:
+                use_plural = False
         elif m == 0:
             formatted_number = '0'
+            use_plural = True
+            if self.is_dimensionless and not self.is_fraction and _recursive_depth <= 1:
+                use_plural = False
         elif m < 0:
             raise ValueError('Negative values not supported')
         else:
-            formatted_number = PrettyUnit.unitless.pformat(m * ureg.one)
-            use_plural = 'of a' not in formatted_number
+            formatted_number = PrettyUnit.unitless.pformat(m * ureg.one, _recursive_depth=_recursive_depth + 1)
+            if self.is_dimensionless:
+                use_plural = not self.is_fraction
+            else:
+                use_plural = 'of a' not in formatted_number
 
         if self.pname_s is None or self.pname_pl is None:
             return formatted_number
         else:
             return f'{formatted_number} {self.pname_pl if use_plural else self.pname_s}'
+
+
+# TODO:
+# Make the following always happen:
+# 1.23 billionths of a billionth of a second
+# 1.23 thousand seconds
+# 1.23 billions of billions of seconds
 
 
 PrettyUnit.unitless = PrettyUnit.of(
