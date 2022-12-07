@@ -59,17 +59,70 @@
 .App-body {
   text-align: left;
   display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+  font-size: calc(8px + 1.5vmax);
+}
+
+.sidebar-container {
+  width: fit-content;
+  height: 100vh;
+  margin-right: -20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: -5px 5px 5px 5px hsla(0, 0%, 0%, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateX(-100%);
+  transition: all 400ms ease-in;
+  transition-property: transform margin-right;
+}
+
+.sidebar-container.visible {
+  margin-right: 0;
+  transform: translateX(0);
+}
+
+.sidebar {
+  height: calc(100vh - 68px - 5vmax);
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px;
+  position: relative;
+}
+
+.sidebar-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: calc(10px + 1.7vmax);
+}
+
+.btn-close {
+  width: 0.4em;
+  height: 0.4em;
+}
+
+.card-container {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
   box-sizing: border-box;
-  width: 100vw;
   height: calc(100vh - 68px - 5vmax);
-  padding: 0 20%;
 }
 
 .text-card {
-  font-size: calc(8px + 1.5vmax);
+  box-sizing: border-box;
+  width: min(80%, 60vw);
   padding: 40px;
   color: black;
   border-radius: 0.7em;
@@ -78,20 +131,29 @@
 }
 
 .search-menu-toggle {
+  border: none;
+  border-top: 1px solid #ddd;
   font-size: calc(8px + 1.5vmax);
-  font-weight: 600;
   text-align: center;
   padding: 10px 20px;
   color: black;
   width: 25vh;
-  transform: translate(0, 100%) rotate(-90deg);
+  transform: translate(100%, 100%) rotate(-90deg);
   transform-origin: top left;
   position: absolute;
-  left: 0;
+  right: 0;
   bottom: 0;
-  border-radius: 0 0 0.7em 0;
+  border-radius: 0 0 0.4em 0;
   box-shadow: 5px 5px 5px -5px hsla(0, 0%, 0%, 0.2);
   background: rgba(255, 255, 255, 0.95);
+  transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+  transition-property: background-color, transform;
+}
+
+.search-menu-toggle:hover,
+.search-menu-toggle:focus {
+  background-color: rgba(250, 250, 250, 0.95);
+  transform: translate(100%, 100%) rotate(-90deg) scale(1.07);
 }
 
 .logo {
@@ -130,6 +192,13 @@
 
 .inline-block {
   display: inline-flex;
+}
+
+.spinner-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .initializing-spinner {

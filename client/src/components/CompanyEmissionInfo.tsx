@@ -2,7 +2,9 @@ import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Spinner from "react-bootstrap/Spinner";
+import Tooltip from "react-bootstrap/Tooltip";
 import { CompanyOutput } from "../api";
 import { api } from "../config";
 import { CompanyDropdown } from "./CompanyDropdown";
@@ -119,65 +121,87 @@ export const CompanyEmissionInfo: React.FunctionComponent<
     }
   }, [emission]);
 
+  const renderTooltip = (props: any) => (
+    <Tooltip id="card-tooltip" {...props}>
+      Click to randomize
+    </Tooltip>
+  );
+
   const topCardLoading =
     companyIsLoading || emissionIsLoading || !selectedCompany;
   const bottomCardLoading = topCardLoading || factIsLoading;
 
   return (
-    <>
-      <Button
-        className="text-card"
-        disabled={topCardLoading}
-        onClick={!topCardLoading ? () => fetchWorstOffender() : undefined}
-        bsPrefix="no-css"
+    <div className="card-container">
+      <OverlayTrigger
+        placement="right"
+        delay={{ show: 250, hide: 0 }}
+        overlay={renderTooltip}
       >
-        {!topCardLoading ? (
-          <>
-            <span>{"In "}</span>
-            <Form.Select
-              className="year-select inline-block"
-              value={selectedYear}
-              onChange={(event) => setSelectedYear(event.target.value)}
-            >
-              {yearOptions}
-            </Form.Select>
-            <span>{", facilities in the US owned by "}</span>
-            <CompanyDropdown
-              yearFilter={selectedYear}
-              setSelectedCompany={setSelectedCompany}
-              selectedCompany={selectedCompany}
-              typeaheadClassNames="inline-block"
-            />
-            <span>
-              {` reported emissions equivalent to at least ${formattedEmission} of CO`}
-              <sub>{"2"}</sub>
-              {"."}
+        <Button
+          className="text-card"
+          disabled={topCardLoading}
+          onClick={!topCardLoading ? () => fetchWorstOffender() : undefined}
+          bsPrefix="no-css"
+        >
+          {!topCardLoading ? (
+            <>
+              <span>{"In "}</span>
+              <Form.Select
+                className="year-select inline-block"
+                value={selectedYear}
+                onChange={(event) => setSelectedYear(event.target.value)}
+              >
+                {yearOptions}
+              </Form.Select>
+              <span>{", facilities in the US owned by "}</span>
+              <CompanyDropdown
+                yearFilter={selectedYear}
+                setSelectedCompany={setSelectedCompany}
+                selectedCompany={selectedCompany}
+                typeaheadClassNames="inline-block"
+              />
+              <span>
+                {` reported emissions equivalent to at least ${formattedEmission} of CO`}
+                <sub>{"2"}</sub>
+                {"."}
+              </span>
+            </>
+          ) : (
+            <span className="spinner-container">
+              <Spinner
+                className="initializing-spinner"
+                animation="border"
+                role="status"
+              />
             </span>
-          </>
-        ) : (
-          <Spinner
-            className="initializing-spinner"
-            animation="border"
-            role="status"
-          />
-        )}
-      </Button>
-      <Button
-        className="text-card"
-        disabled={bottomCardLoading}
-        onClick={!bottomCardLoading ? () => refreshFact() : undefined}
-        bsPrefix="no-css"
+          )}
+        </Button>
+      </OverlayTrigger>
+      <OverlayTrigger
+        placement="right"
+        delay={{ show: 250, hide: 0 }}
+        overlay={renderTooltip}
       >
-        {!bottomCardLoading ? (
-          <>{currentFact}</>
-        ) : (
-          <Spinner
-            className="initializing-spinner"
-            animation="border"
-            role="status"
-          />
-        )}
-      </Button>
-    </>
+        <Button
+          className="text-card"
+          disabled={bottomCardLoading}
+          onClick={!bottomCardLoading ? () => refreshFact() : undefined}
+          bsPrefix="no-css"
+        >
+          {!bottomCardLoading ? (
+            <>{currentFact}</>
+          ) : (
+            <span className="spinner-container">
+              <Spinner
+                className="initializing-spinner"
+                animation="border"
+                role="status"
+              />
+            </span>
+          )}
+        </Button>
+      </OverlayTrigger>
+    </div>
   );
 };
