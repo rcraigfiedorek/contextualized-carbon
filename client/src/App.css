@@ -69,7 +69,7 @@
 .sidebar-container {
   width: fit-content;
   height: 100vh;
-  margin-right: -20vw;
+  margin-right: -30vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -87,13 +87,18 @@
 
 .sidebar {
   height: calc(100vh - 68px - 5vmax);
-  width: 20vw;
+  width: 30vw;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   padding: 20px;
   position: relative;
+  font-size: calc(6px + 1.2vmax);
+}
+
+.sidebar-form {
+  width: 100%;
 }
 
 .sidebar-header {
@@ -103,6 +108,16 @@
   justify-content: space-between;
   align-items: center;
   font-size: calc(10px + 1.7vmax);
+  margin-bottom: 2em;
+}
+
+.sidebar-form-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1em 0;
 }
 
 .btn-close {
@@ -211,16 +226,12 @@
   font-size: inherit;
 }
 
-.company-dropdown * {
-  font-size: inherit;
+.company-dropdown {
+  width: 100%;
 }
 
-.company-dropdown .rbt-input,
-.year-select {
-  margin: 0.1rem 0;
-  padding: 0.1rem 0.25rem;
-  background-image: none;
-  background-color: transparent;
+.company-dropdown * {
+  font-size: inherit;
 }
 
 .company-dropdown .rbt-input:hover,

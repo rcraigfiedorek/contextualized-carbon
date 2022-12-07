@@ -1,13 +1,13 @@
 import classNames from "classnames";
 import _ from "lodash";
-import React, { MutableRefObject, useMemo, useRef, useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import { CompanyOutput } from "../api";
 import { api } from "../config";
 
 interface CompanyDropdownProps {
   yearFilter?: string;
-  selectedCompany: CompanyOutput;
+  selectedCompany?: CompanyOutput;
   setSelectedCompany: (companyOutput: CompanyOutput) => void;
   typeaheadClassNames?: string;
 }
@@ -21,11 +21,6 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
   const ref = useRef(null) as MutableRefObject<any>;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [options, setOptions] = useState<CompanyOutput[]>([]);
-
-  const width = useMemo(
-    () => `${_.size(selectedCompany.name) * 1.15}ch`,
-    [selectedCompany]
-  );
 
   const parsedYearFilter = yearFilter ? _.parseInt(yearFilter) : undefined;
 
@@ -46,6 +41,17 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
       .finally(() => setIsLoading(false));
   }
 
+  const defaultSelected = selectedCompany ? [selectedCompany] : [];
+
+  const resetMenuState = () => {
+    if (ref.current) {
+      ref.current.state.selected = defaultSelected;
+      ref.current.state.showMenu = false;
+    }
+  };
+
+  useEffect(resetMenuState, [selectedCompany]);
+
   return (
     <AsyncTypeahead
       ref={ref}
@@ -54,13 +60,10 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
       id="async-example"
       isLoading={isLoading}
       labelKey="name"
-      defaultSelected={[selectedCompany]}
+      defaultSelected={defaultSelected}
       onSearch={handleSearch}
       minLength={0}
-      onBlur={() => {
-        ref.current!!.state.selected = [selectedCompany];
-        ref.current!!.state.showMenu = false;
-      }}
+      onBlur={resetMenuState}
       placeholder="Type to search..."
       onChange={(selected) => {
         const newCompany = _.head(selected) as CompanyOutput;
@@ -69,7 +72,6 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
         }
       }}
       options={options}
-      style={{ width }}
     />
   );
 };

@@ -1,12 +1,34 @@
 import classNames from "classnames";
-import { useState } from "react";
+import _ from "lodash";
+import { useMemo, useState } from "react";
 import { CloseButton, Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import { CompanyOutput } from "../api";
+import { CompanyDropdown } from "./CompanyDropdown";
 
-interface SidebarProps {}
+interface SidebarProps {
+  company?: CompanyOutput;
+  setCompany: (company?: CompanyOutput) => void;
+  year?: string;
+  setYear: (year?: string) => void;
+}
 
-export const Sidebar: React.FunctionComponent<SidebarProps> = () => {
+export const Sidebar: React.FunctionComponent<SidebarProps> = ({
+  company,
+  year,
+  setCompany,
+  setYear,
+}) => {
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
+
+  const yearOptions = useMemo(
+    () =>
+      _.chain(company?.emissions_by_year)
+        .keys()
+        .map((yearOption) => <option value={yearOption}>{yearOption}</option>)
+        .value(),
+    [company]
+  );
 
   return (
     <div className={classNames("sidebar-container", { visible: showSidebar })}>
@@ -15,20 +37,24 @@ export const Sidebar: React.FunctionComponent<SidebarProps> = () => {
           Search
           <CloseButton onClick={() => setShowSidebar(false)} />
         </div>
-        <Form>
-          <Form.Group>
+        <Form className="sidebar-form">
+          <Form.Group className="sidebar-form-group">
             <Form.Label>Year</Form.Label>
             <Form.Select
               className="year-select inline-block"
-              // value={selectedYear}
-              // onChange={(event) => setSelectedYear(event.target.value)}
+              value={year}
+              onChange={(event) => setYear(event.target.value)}
             >
-              {[]}
+              {yearOptions}
             </Form.Select>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className="sidebar-form-group">
             <Form.Label>Company</Form.Label>
-            {/* <CompanyDropdown /> */}
+            <CompanyDropdown
+              yearFilter={year}
+              selectedCompany={company}
+              setSelectedCompany={setCompany}
+            />
           </Form.Group>
         </Form>
 
