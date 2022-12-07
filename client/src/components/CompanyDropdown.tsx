@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import _ from "lodash";
-import React, { MutableRefObject, useRef, useState } from "react";
+import React, { MutableRefObject, useMemo, useRef, useState } from "react";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import { CompanyOutput } from "../api";
 import { api } from "../config";
@@ -21,6 +21,11 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
   const ref = useRef(null) as MutableRefObject<any>;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [options, setOptions] = useState<CompanyOutput[]>([]);
+
+  const width = useMemo(
+    () => `${_.size(selectedCompany.name) * 1.15}ch`,
+    [selectedCompany]
+  );
 
   const parsedYearFilter = yearFilter ? _.parseInt(yearFilter) : undefined;
 
@@ -49,9 +54,9 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
       id="async-example"
       isLoading={isLoading}
       labelKey="name"
-      minLength={3}
       defaultSelected={[selectedCompany]}
       onSearch={handleSearch}
+      minLength={0}
       onBlur={() => {
         ref.current!!.state.selected = [selectedCompany];
         ref.current!!.state.showMenu = false;
@@ -64,6 +69,7 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
         }
       }}
       options={options}
+      style={{ width }}
     />
   );
 };

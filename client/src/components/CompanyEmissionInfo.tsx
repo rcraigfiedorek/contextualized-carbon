@@ -77,7 +77,12 @@ export const CompanyEmissionInfo: React.FunctionComponent<
   } else
     return (
       <>
-        <div className="text-card">
+        <Button
+          className="text-card"
+          // disabled={factIsLoading}
+          // onClick={!factIsLoading ? () => refreshFact() : undefined}
+          bsPrefix="no-css"
+        >
           <span>{"In "}</span>
           <Form.Select
             className="year-select inline-block"
@@ -98,7 +103,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
             <sub>{"2"}</sub>
             {"."}
           </span>
-        </div>
+        </Button>
         <Button
           className="text-card"
           disabled={factIsLoading}
