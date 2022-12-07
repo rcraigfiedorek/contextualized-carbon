@@ -77,8 +77,21 @@
   background: rgba(255, 255, 255, 0.95);
 }
 
-.text-card:hover,
-.text-card:focus {
+.search-menu-toggle {
+  font-size: calc(8px + 1.5vmax);
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 20px;
+  color: black;
+  width: 25vh;
+  transform: translate(0, 100%) rotate(-90deg);
+  transform-origin: top left;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  border-radius: 0 0 0.7em 0;
+  box-shadow: 5px 5px 5px -5px hsla(0, 0%, 0%, 0.2);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .logo {
