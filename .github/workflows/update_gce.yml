@@ -30,6 +30,8 @@ jobs:
           context: ./server
           push: true
           tags: rcraigfiedorek/emissions-bot:server
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Docker Build and Push Client
         uses: docker/build-push-action@v3
@@ -37,6 +39,8 @@ jobs:
           context: ./client
           push: true
           tags: rcraigfiedorek/emissions-bot:client
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   cloud-deploy:
     needs: docker-build-push
