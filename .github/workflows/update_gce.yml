@@ -25,14 +25,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker Build and Push Server
-        uses: docker/build-push-action
+        uses: docker/build-push-action@v3
         with:
           context: ./server
           push: true
           tags: rcraigfiedorek/emissions-bot:server
 
       - name: Docker Build and Push Client
-        uses: docker/build-push-action
+        uses: docker/build-push-action@v3
         with:
           context: ./client
           push: true
