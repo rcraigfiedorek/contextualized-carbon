@@ -32,6 +32,12 @@ db_cli.command('seed')(
 )
 app.cli.add_command(db_cli)
 
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    db.session.close()
+
+
 app.logger.setLevel('INFO')
 
 

@@ -1,6 +1,7 @@
 import _ from "lodash";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import c2es from "../c2es.png";
 import epa from "../epa.svg";
 import github from "../github.svg";
 import logo from "../logo.svg";
@@ -20,6 +21,11 @@ export const NavBar: React.FunctionComponent<NavBarProps> = ({}) => {
       href: "https://www.epa.gov/ghgreporting",
       label: "Source data",
       iconSrc: epa,
+    },
+    {
+      href: "https://www.c2es.org/content/carbon-tax-basics/",
+      label: "Climate solutions",
+      iconSrc: c2es,
     },
     { href: "https://craigf.io", label: "About the author" },
   ];
