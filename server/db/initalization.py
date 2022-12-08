@@ -35,7 +35,7 @@ def load_envirofacts_data(csv_file: str | None = None):
 
     grouped_data = clean_envirofacts_data(data)
 
-    for company_name in grouped_data.index.levels[0]:
+    for company_name in grouped_data.index.unique(level=0):
         emissions = [
             EmissionsModel(
                 year=row.Index,
