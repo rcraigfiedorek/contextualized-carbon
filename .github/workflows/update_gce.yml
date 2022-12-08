@@ -53,7 +53,7 @@ jobs:
       - name: Update GCE Instance Files
         run: |-
           gcloud compute scp \
-            ./docker-compose/docker-compose.prod.yml \
+            ./docker-compose.prod.yml \
             ./google/compute/instance-startup.sh \
             rcraigfiedorek@instance-1:~/EmissionsBot \
             --zone us-central1-c
