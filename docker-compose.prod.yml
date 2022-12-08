@@ -4,6 +4,7 @@ services:
     image: postgres:15.1-bullseye
     environment:
       - POSTGRES_PASSWORD=${EMISSIONS_DB_PASSWORD}
+      - POSTGRES_DB=corporate-emissions
       - PGDATA=/var/lib/postgresql/data/emissionspgdata
     volumes:
       - "/home/pgdata:/var/lib/postgresql/data"
