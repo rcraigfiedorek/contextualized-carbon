@@ -8,6 +8,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/emissionspgdata
     volumes:
       - "pgdata:/var/lib/postgresql/data"
+    restart: always
   server:
     depends_on:
       - db
@@ -17,6 +18,7 @@ services:
       target: production
     environment:
       - EMISSIONS_DB_PASSWORD=${EMISSIONS_DB_PASSWORD}
+    restart: always
   client:
     depends_on:
       - server
@@ -27,6 +29,7 @@ services:
     volumes:
       - certbot-www:/var/www/certbot:ro
       - certbot-conf:/etc/nginx/ssl:ro
+    restart: always
     ports:
       - "80:80"
       - "443:443"
