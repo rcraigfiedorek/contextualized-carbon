@@ -145,6 +145,15 @@
               "type": "integer"
             },
             "required": false
+          },
+          {
+            "in": "query",
+            "name": "include_bold_tags",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "required": false
           }
         ],
         "responses": {

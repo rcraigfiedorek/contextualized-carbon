@@ -69,6 +69,7 @@ class CompanyQueryInput(PaginationInput):
 class EmissionFactQueryInput(BaseSchema):
     emission = fields.Float(required=True)
     shuffle_key = fields.Integer(required=False)
+    include_bold_tags = fields.Boolean(required=False, load_default=False)
 
 
 class EmissionComparisonFactOutput(BaseSchema):

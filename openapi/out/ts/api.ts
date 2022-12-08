@@ -329,10 +329,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Get Emission Comparison Fact
          * @param {number} emission 
          * @param {number} [shuffleKey] 
+         * @param {boolean} [includeBoldTags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiEmissionComparisonFactGet: async (emission: number, shuffleKey?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        apiEmissionComparisonFactGet: async (emission: number, shuffleKey?: number, includeBoldTags?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'emission' is not null or undefined
             assertParamExists('apiEmissionComparisonFactGet', 'emission', emission)
             const localVarPath = `/api/emissionComparisonFact`;
@@ -353,6 +354,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
             if (shuffleKey !== undefined) {
                 localVarQueryParameter['shuffle_key'] = shuffleKey;
+            }
+
+            if (includeBoldTags !== undefined) {
+                localVarQueryParameter['include_bold_tags'] = includeBoldTags;
             }
 
 
@@ -443,11 +448,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Get Emission Comparison Fact
          * @param {number} emission 
          * @param {number} [shuffleKey] 
+         * @param {boolean} [includeBoldTags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EmissionComparisonFactOutput>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiEmissionComparisonFactGet(emission, shuffleKey, options);
+        async apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, includeBoldTags?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EmissionComparisonFactOutput>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiEmissionComparisonFactGet(emission, shuffleKey, includeBoldTags, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -501,11 +507,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @summary Get Emission Comparison Fact
          * @param {number} emission 
          * @param {number} [shuffleKey] 
+         * @param {boolean} [includeBoldTags] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, options?: any): AxiosPromise<EmissionComparisonFactOutput> {
-            return localVarFp.apiEmissionComparisonFactGet(emission, shuffleKey, options).then((request) => request(axios, basePath));
+        apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, includeBoldTags?: boolean, options?: any): AxiosPromise<EmissionComparisonFactOutput> {
+            return localVarFp.apiEmissionComparisonFactGet(emission, shuffleKey, includeBoldTags, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -561,12 +568,13 @@ export class DefaultApi extends BaseAPI {
      * @summary Get Emission Comparison Fact
      * @param {number} emission 
      * @param {number} [shuffleKey] 
+     * @param {boolean} [includeBoldTags] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, options?: AxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).apiEmissionComparisonFactGet(emission, shuffleKey, options).then((request) => request(this.axios, this.basePath));
+    public apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, includeBoldTags?: boolean, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).apiEmissionComparisonFactGet(emission, shuffleKey, includeBoldTags, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

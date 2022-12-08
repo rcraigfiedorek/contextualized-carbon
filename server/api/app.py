@@ -71,7 +71,7 @@ def get_companies(query):
 def get_emission_comparison_fact(query):
     fact_template, current_shuffle_key, next_shuffle_key = get_fact_template(query.get('shuffle_key'))
     return {
-        'fact': fact_template.get_fact(query['emission']),
+        'fact': fact_template.get_fact(query['emission'], include_bold_tags=query['include_bold_tags']),
         'current_shuffle_key': current_shuffle_key,
         'next_shuffle_key': next_shuffle_key
     }

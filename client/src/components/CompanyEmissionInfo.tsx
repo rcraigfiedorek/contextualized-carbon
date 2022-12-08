@@ -47,7 +47,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
     setFactIsLoading(true);
     const shuffleKey = increment ? nextFactShuffleKey : currentFactShuffleKey;
     return api
-      .apiEmissionComparisonFactGet(emission, shuffleKey)
+      .apiEmissionComparisonFactGet(emission, shuffleKey, true)
       .then(({ data }) => {
         setFact(data.fact);
         if (increment || nextFactShuffleKey === undefined) {
@@ -73,13 +73,20 @@ export const CompanyEmissionInfo: React.FunctionComponent<
 
   const topCardBody = (
     <>
-      {`In ${year}, facilities in the US owned by ${company?.name} reported emissions
-      equivalent to ${formattedEmission} of CO`}
+      {`In ${year}, facilities in the US owned by `}
+      <b>{company?.name}</b>
+      {" reported emissions equivalent to "}
+      <b>{formattedEmission}</b>
+      {" of CO"}
       <sub>{"2"}</sub>
       {"."}
     </>
   );
-  const bottomCardBody = <>{fact}</>;
+  const bottomCardBody = fact ? (
+    <div dangerouslySetInnerHTML={{ __html: fact }} />
+  ) : (
+    <></>
+  );
 
   return (
     <div className="card-container">
