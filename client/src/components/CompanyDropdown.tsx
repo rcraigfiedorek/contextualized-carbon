@@ -43,14 +43,16 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
 
   const defaultSelected = selectedCompany ? [selectedCompany] : [];
 
-  const resetMenuState = () => {
+  const resetState = () => {
     if (ref.current) {
       ref.current.state.selected = defaultSelected;
+      ref.current.state.text = selectedCompany?.name || "";
       ref.current.state.showMenu = false;
+      setOptions([]);
     }
   };
 
-  useEffect(resetMenuState, [selectedCompany]);
+  useEffect(resetState, [selectedCompany]);
 
   return (
     <AsyncTypeahead
@@ -63,7 +65,7 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
       defaultSelected={defaultSelected}
       onSearch={handleSearch}
       minLength={0}
-      onBlur={resetMenuState}
+      onBlur={resetState}
       placeholder="Type to search..."
       onChange={(selected) => {
         const newCompany = _.head(selected) as CompanyOutput;
@@ -72,6 +74,7 @@ export const CompanyDropdown: React.FunctionComponent<CompanyDropdownProps> = ({
         }
       }}
       options={options}
+      useCache={false}
     />
   );
 };
