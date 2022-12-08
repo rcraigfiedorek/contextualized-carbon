@@ -4,13 +4,24 @@ services:
     image: postgres:15.1-bullseye
     environment:
       - POSTGRES_PASSWORD=${EMISSIONS_DB_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data/emissionspgdata
+    volumes:
+      - "./pgdata:/var/lib/postgresql/data"
   server:
+    depends_on:
+      - db
     image: rcraigfiedorek/emissions-bot:server
+    build:
+      context: ./server
+      target: production
     environment:
       - EMISSIONS_DB_PASSWORD=${EMISSIONS_DB_PASSWORD}
   client:
     depends_on:
       - server
+    build:
+      context: ./client
+      target: production
     image: rcraigfiedorek/emissions-bot:client
     ports:
       - "80:80"

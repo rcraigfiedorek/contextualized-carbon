@@ -4,67 +4,68 @@ on:
   push:
     branches:
       - main
+      - prod-deployment
   workflow_dispatch:
 
-
 jobs:
-
   docker-build-push:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Docker Auth
-      uses: docker/login-action@v2
-      with:
-        username: rcraigfiedorek
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker Auth
+        uses: docker/login-action@v2
+        with:
+          username: rcraigfiedorek
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Docker Compose Build
-      working-directory: ./docker-compose
-      run: |-
-        docker compose -f docker-compose.dev.yml build
-    
-    - name: Docker Compose Push
-      working-directory: ./docker-compose
-      run: |-
-        docker compose -f docker-compose.dev.yml push
+      - name: Docker Compose Build
+        run: |-
+          docker compose -f docker-compose.prod.yml build
+
+      - name: Docker Compose Push
+        run: |-
+          docker compose -f docker-compose.prod.yml push
 
   cloud-deploy:
     needs: docker-build-push
     runs-on: ubuntu-latest
 
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: "read"
+      id-token: "write"
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Google Cloud Auth
-      uses: google-github-actions/auth@v1
-      with:
-        workload_identity_provider: 'projects/135442769611/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-        service_account: 'emissions-bot-github@delta-timer-368701.iam.gserviceaccount.com'
+      - name: Google Cloud Auth
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: "projects/135442769611/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider"
+          service_account: "emissions-bot-github@delta-timer-368701.iam.gserviceaccount.com"
 
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v1
-      
-    - name: Update GCE Instance Files
-      run: |-
-        gcloud compute scp \
-          ./docker-compose/docker-compose.prod.yml \
-          ./google/compute/instance-startup.sh \
-          rcraigfiedorek@instance-1:~/EmissionsBot \
-          --zone us-central1-c
-    
-    - name: Start Application
-      run: |-
-        gcloud compute ssh rcraigfiedorek@instance-1 \
-          --zone us-central1-c \
-          --ssh-key-file ~/.ssh/google_compute_engine \
-          --tunnel-through-iap \
-          --command "bash ./EmissionsBot/instance-startup.sh"
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Update GCE Instance Files
+        run: |-
+          gcloud compute scp \
+            ./docker-compose/docker-compose.prod.yml \
+            ./google/compute/instance-startup.sh \
+            rcraigfiedorek@instance-1:~/EmissionsBot \
+            --zone us-central1-c
+
+      - name: Start Application
+        env:
+          EMISSIONS_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |-
+          gcloud compute ssh rcraigfiedorek@instance-1 \
+            --zone us-central1-c \
+            --ssh-key-file ~/.ssh/google_compute_engine \
+            --tunnel-through-iap \
+            --command \
+            "export EMISSIONS_DB_PASSWORD=$EMISSIONS_DB_PASSWORD; \
+            bash ./EmissionsBot/instance-startup.sh"
