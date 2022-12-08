@@ -34,8 +34,8 @@ TAYLOR_YEARLY_CIRCUMNAVIGATIONS_PERIOD = ureg.yr / TAYLOR_CIRCUMNAVIGATIONS_PER_
 taylor_jet_fact = SingleVarFactTemplate(
     conversion=TAYLOR_YEARLY_CIRCUMNAVIGATIONS_PERIOD,
     message=(
-        'Taylor Swift would have to fly her private jet around the entire equator once '
-        'every <b>%s</b> for an entire year to generate the same emissions.'
+        'Taylor Swift would have to fly her private jet around the entire equator <b>once '
+        'every %s</b> for an entire year to generate the same emissions.'
     ),
     calc_function=operator.truediv
 )

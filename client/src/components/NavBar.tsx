@@ -17,7 +17,7 @@ export const NavBar: React.FunctionComponent<NavBarProps> = ({}) => {
       iconSrc: github,
     },
     {
-      href: "https://enviro.epa.gov/envirofacts/ghg",
+      href: "https://www.epa.gov/ghgreporting",
       label: "Source data",
       iconSrc: epa,
     },

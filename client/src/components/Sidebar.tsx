@@ -58,6 +58,30 @@ export const Sidebar: React.FunctionComponent<SidebarProps> = ({
           </Form.Group>
         </Form>
 
+        <div className="sidebar-footer">
+          <p>
+            Note: the emissions included here are reported only from large GHG
+            emission sources and fuel and industrial gas suppliers. Most
+            organizations' indirect emissions are not included.{" "}
+            <a
+              href="https://www.epa.gov/climateleadership/scope-1-and-scope-2-inventory-guidance"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read more about different types of emissions.
+            </a>
+          </p>
+          <p>
+            <a
+              href="https://github.com/rcraigfiedorek/emissions-bot/blob/main/SOURCES.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Click here to see sources on emission comparisons.
+            </a>
+          </p>
+        </div>
+
         <Button
           className="search-menu-toggle"
           onClick={() => setShowSidebar(!showSidebar)}
