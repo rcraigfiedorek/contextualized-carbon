@@ -25,8 +25,9 @@ export const CompanyEmissionInfo: React.FunctionComponent<
 
   const emission = useMemo<number | undefined>(
     () =>
-      year &&
-      _.get(company, ["emissions_by_year", year, "fully_owned_emissions"]),
+      year
+        ? _.get(company, ["emissions_by_year", year, "fully_owned_emissions"])
+        : undefined,
     [company, year]
   );
 

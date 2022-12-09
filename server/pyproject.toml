@@ -20,6 +20,7 @@ google-cloud-secret-manager = "^2.12.6"
 flask-cors = "^3.0.10"
 pint = "^0.20.1"
 pylcs = "^0.0.7"
+pg8000 = "^1.29.3"
 
 
 [tool.poetry.group.dev.dependencies]
