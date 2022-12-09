@@ -67,10 +67,10 @@ COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 RUN poetry install --no-root
 
 WORKDIR /server
-COPY ./api ./api
-COPY ./db ./db
+VOLUME ./api
+VOLUME ./db
 EXPOSE 5000
-CMD exec gunicorn --bind :5000 --workers 4 --threads 8 --timeout 0 api:app
+CMD exec gunicorn --bind :5000 --workers 4 --threads 8 --timeout 0 --reload api:app
 
 
 # `production` image used for runtime

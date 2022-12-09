@@ -18,7 +18,7 @@ class FactTemplate:
         if self.calc_functions is None:
             self.calc_functions = [operator.mul] * len(self.conversions)
         if self.message_no_tags is None:
-            self.message_no_tags = re.sub(r'<.*?>', '', self.message)
+            self.message_no_tags = re.sub(r"<.*?>", "", self.message)
 
     def get_fact(self, tco2e: float, include_bold_tags=False) -> str:
         co2_quantity = tco2e * (ureg.t * ureg.co2)
@@ -33,6 +33,6 @@ def SingleVarFactTemplate(
     conversion: Quantity,
     message: str,
     calc_function: Callable[[Quantity, Quantity], Quantity] = operator.mul,
-    citation: Optional[dict] = None
+    citation: Optional[dict] = None,
 ) -> FactTemplate:
     return FactTemplate([conversion], message, [calc_function], citation)

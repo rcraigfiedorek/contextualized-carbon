@@ -11,7 +11,9 @@ from api.facts.template import FactTemplate
 def get_fact_template(shuffle_key: Optional[int]) -> Tuple[FactTemplate, int, int]:
     # If this key has passed through all list items, generate a new key which
     # will shuffle the list and iterate through it starting from the beginning.
-    shuffle_key: ShuffleKey = ShuffleKey(shuffle_key) if shuffle_key is not None else ShuffleKey.random()
+    shuffle_key: ShuffleKey = (
+        ShuffleKey(shuffle_key) if shuffle_key is not None else ShuffleKey.random()
+    )
     if shuffle_key.overflow():
         shuffle_key = ShuffleKey.random()
 
