@@ -14,6 +14,7 @@ function App() {
 
   const [displayedCompany, setDisplayedCompany] = useState<CompanyOutput>();
   const [displayedYear, setDisplayedYear] = useState<string>();
+  const [navbarExpanded, setNavbarExpanded] = useState<boolean>(false);
 
   const getRandomWorstOffender = useWorstOffender(availableYears);
 
@@ -34,8 +35,8 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar />
-      <div className="App-body">
+      <NavBar expanded={navbarExpanded} setExpanded={setNavbarExpanded} />
+      <div className="App-body" onClick={() => setNavbarExpanded(false)}>
         <Sidebar
           company={displayedCompany}
           year={displayedYear}

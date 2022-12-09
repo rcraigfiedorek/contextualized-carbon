@@ -7,9 +7,15 @@ import github from "../github.svg";
 import logo from "../logo.svg";
 import openapi from "../openapi.svg";
 
-interface NavBarProps {}
+interface NavBarProps {
+  expanded: boolean;
+  setExpanded: (value: boolean) => void;
+}
 
-export const NavBar: React.FunctionComponent<NavBarProps> = ({}) => {
+export const NavBar: React.FunctionComponent<NavBarProps> = ({
+  expanded,
+  setExpanded,
+}) => {
   const navBarLinks: NavBarLinkProps[] = [
     { href: "/api/docs", label: "API Documentation", iconSrc: openapi },
     {
@@ -31,7 +37,13 @@ export const NavBar: React.FunctionComponent<NavBarProps> = ({}) => {
   ];
 
   return (
-    <Navbar expand={false} fixed="top" className="emissions-navbar">
+    <Navbar
+      expand={false}
+      expanded={expanded}
+      onToggle={setExpanded}
+      fixed="top"
+      className="emissions-navbar"
+    >
       <Navbar.Brand>
         <img src={logo} className="logo" />
         <span className="header-text">
