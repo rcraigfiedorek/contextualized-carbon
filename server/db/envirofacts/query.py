@@ -118,7 +118,7 @@ class Query:
             try:
                 response = requests.get(_url)
                 response.raise_for_status()
-            except (requests.exceptions.HTTPError, ValueError):
+            except Exception:
                 # Retry once on any failure
                 time.sleep(5)
                 response = requests.get(_url)

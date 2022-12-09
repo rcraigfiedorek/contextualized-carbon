@@ -1,5 +1,5 @@
 from db.connection import db
-from db.initalization import load_envirofacts_data, create_tables
+from db.initialization import load_envirofacts_data, create_tables
 from db.models import CompanyModel, EmissionsModel
 
 __all__ = [
