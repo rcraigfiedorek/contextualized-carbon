@@ -8,15 +8,15 @@ import { NavBar } from "./components/NavBar";
 import { Sidebar } from "./components/Sidebar";
 import { useWorstOffender } from "./hooks/useWorstOffender";
 
-function App() {
-  const availableYears = _.map(_.range(2010, 2022), _.toString);
-  const initialYear = "2021";
+const AVAILABLE_YEARS = _.map(_.range(2010, 2022), _.toString);
+const INITIAL_YEAR = "2021";
 
+function App() {
   const [displayedCompany, setDisplayedCompany] = useState<CompanyOutput>();
   const [displayedYear, setDisplayedYear] = useState<string>();
   const [navbarExpanded, setNavbarExpanded] = useState<boolean>(false);
 
-  const getRandomWorstOffender = useWorstOffender(availableYears);
+  const getRandomWorstOffender = useWorstOffender(AVAILABLE_YEARS);
 
   const displayRandomWorstOffender = (year?: string) => {
     setDisplayedCompany(undefined);
@@ -30,7 +30,7 @@ function App() {
   };
 
   useEffect(() => {
-    displayRandomWorstOffender(initialYear);
+    displayRandomWorstOffender(INITIAL_YEAR);
   }, []);
 
   return (

@@ -90,7 +90,7 @@ new_england_forest_fact = SingleVarFactTemplate(
 ALL_FACTS.append(new_england_forest_fact)
 
 
-EARTH_AIR_COLUMN_DENSITY = 1.03 * ureg.kg / ureg.cm**2
+EARTH_AIR_COLUMN_DENSITY = 1.009 * ureg.kg / ureg.cm**2
 CO2_LETHAL_CONCENTRATION = 0.1 * ureg.g * ureg.co2 / ureg.g
 # The below calculation is the solution to this equation:
 # CO2_LETHAL_CONCENTRATION == AIR_COLUMN_LETHAL_CO2 / (EARTH_AIR_COLUMN_DENSITY + AIR_COLUMN_LETHAL_CO2 / ureg.co2)
@@ -157,13 +157,12 @@ carpet_fact = SingleVarFactTemplate(
 ALL_FACTS.append(carpet_fact)
 
 
-DEATHS_PER_EMISSION_LOWER = 1.71e-4 / (ureg.t * ureg.co2)
-DEATHS_PER_EMISSION_UPPER = 6.78e-4 / (ureg.t * ureg.co2)
-death_fact = FactTemplate(
-    conversions=[DEATHS_PER_EMISSION_LOWER, DEATHS_PER_EMISSION_UPPER],
+DEATHS_PER_EMISSIONS = 2.26e-4 / (ureg.t * ureg.co2)
+death_fact = SingleVarFactTemplate(
+    conversion=DEATHS_PER_EMISSIONS,
     message=(
         "Current research estimates that these emissions alone will directly "
-        "cause at least <b>%s human deaths</b> and up to <b>%s human deaths</b>."
+        "cause <b>%s human deaths</b>."
     ),
 )
 ALL_FACTS.append(death_fact)

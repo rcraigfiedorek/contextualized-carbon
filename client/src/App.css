@@ -24,14 +24,10 @@
   justify-content: flex-end;
   background: linear-gradient(
     40deg,
-    #155263 9%,
-    #155263 40%,
-    #ff6f3c calc(40% + 1px),
-    #ff6f3c 52%,
-    #ff9a3c calc(52% + 1px),
-    #ff9a3c 80%,
-    #ffc93c calc(80% + 1px),
-    #ffc93c 100%
+    #155263 0 40%,
+    #ff6f3c 40% 52%,
+    #ff9a3c 52% 80%,
+    #ffc93c 80% 100%
   );
 }
 
