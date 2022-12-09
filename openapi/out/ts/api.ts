@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Corporate Emission Facts API
+ * Corporate Emissions Facts API
  * This is a free and public API that exposes sanitized corporate emissions data sourced from the <a href=\"https://www.epa.gov/ghgreporting\" target=\"_blank\" rel=\"noopener noreferrer\">EPA Greenhouse Gas Reporting Program</a>. Functions that aid public comprehension of the magnitude of corporate emissions are also included.
  *
  * The version of the OpenAPI document: 0.0.1
@@ -250,10 +250,10 @@ export interface ValidationErrorDetailLocation {
 }
 
 /**
- * CorporateEmissionFactsApi - axios parameter creator
+ * CorporateEmissionsFactsApi - axios parameter creator
  * @export
  */
-export const CorporateEmissionFactsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const CorporateEmissionsFactsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -435,11 +435,11 @@ export const CorporateEmissionFactsApiAxiosParamCreator = function (configuratio
 };
 
 /**
- * CorporateEmissionFactsApi - functional programming interface
+ * CorporateEmissionsFactsApi - functional programming interface
  * @export
  */
-export const CorporateEmissionFactsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = CorporateEmissionFactsApiAxiosParamCreator(configuration)
+export const CorporateEmissionsFactsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CorporateEmissionsFactsApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -496,11 +496,11 @@ export const CorporateEmissionFactsApiFp = function(configuration?: Configuratio
 };
 
 /**
- * CorporateEmissionFactsApi - factory interface
+ * CorporateEmissionsFactsApi - factory interface
  * @export
  */
-export const CorporateEmissionFactsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = CorporateEmissionFactsApiFp(configuration)
+export const CorporateEmissionsFactsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CorporateEmissionsFactsApiFp(configuration)
     return {
         /**
          * 
@@ -553,22 +553,22 @@ export const CorporateEmissionFactsApiFactory = function (configuration?: Config
 };
 
 /**
- * CorporateEmissionFactsApi - object-oriented interface
+ * CorporateEmissionsFactsApi - object-oriented interface
  * @export
- * @class CorporateEmissionFactsApi
+ * @class CorporateEmissionsFactsApi
  * @extends {BaseAPI}
  */
-export class CorporateEmissionFactsApi extends BaseAPI {
+export class CorporateEmissionsFactsApi extends BaseAPI {
     /**
      * 
      * @summary Get a specific company\'s emissions data
      * @param {number} companyId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CorporateEmissionFactsApi
+     * @memberof CorporateEmissionsFactsApi
      */
     public apiCompaniesCompanyIdGet(companyId: number, options?: AxiosRequestConfig) {
-        return CorporateEmissionFactsApiFp(this.configuration).apiCompaniesCompanyIdGet(companyId, options).then((request) => request(this.axios, this.basePath));
+        return CorporateEmissionsFactsApiFp(this.configuration).apiCompaniesCompanyIdGet(companyId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -582,10 +582,10 @@ export class CorporateEmissionFactsApi extends BaseAPI {
      * @param {number} [sortYear] Specifies which year the \&quot;sort_by\&quot; attribute should be collected from.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CorporateEmissionFactsApi
+     * @memberof CorporateEmissionsFactsApi
      */
     public apiCompaniesGet(page?: number, perPage?: number, name?: string, year?: number, sortBy?: 'name' | 'facility_count' | 'all_facility_emissions' | 'fully_owned_emissions', sortYear?: number, options?: AxiosRequestConfig) {
-        return CorporateEmissionFactsApiFp(this.configuration).apiCompaniesGet(page, perPage, name, year, sortBy, sortYear, options).then((request) => request(this.axios, this.basePath));
+        return CorporateEmissionsFactsApiFp(this.configuration).apiCompaniesGet(page, perPage, name, year, sortBy, sortYear, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -596,10 +596,10 @@ export class CorporateEmissionFactsApi extends BaseAPI {
      * @param {boolean} [includeBoldTags] If true, the output text will include HTML tags for text emphasis.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CorporateEmissionFactsApi
+     * @memberof CorporateEmissionsFactsApi
      */
     public apiEmissionComparisonFactGet(emission: number, shuffleKey?: number, includeBoldTags?: boolean, options?: AxiosRequestConfig) {
-        return CorporateEmissionFactsApiFp(this.configuration).apiEmissionComparisonFactGet(emission, shuffleKey, includeBoldTags, options).then((request) => request(this.axios, this.basePath));
+        return CorporateEmissionsFactsApiFp(this.configuration).apiEmissionComparisonFactGet(emission, shuffleKey, includeBoldTags, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -608,10 +608,10 @@ export class CorporateEmissionFactsApi extends BaseAPI {
      * @param {string} [quantity] A string containing a number and a unit
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CorporateEmissionFactsApi
+     * @memberof CorporateEmissionsFactsApi
      */
     public apiFormatQuantityGet(quantity?: string, options?: AxiosRequestConfig) {
-        return CorporateEmissionFactsApiFp(this.configuration).apiFormatQuantityGet(quantity, options).then((request) => request(this.axios, this.basePath));
+        return CorporateEmissionsFactsApiFp(this.configuration).apiFormatQuantityGet(quantity, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

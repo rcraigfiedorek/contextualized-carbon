@@ -19,7 +19,7 @@ from db import CompanyModel, EmissionsModel, create_tables, db, load_envirofacts
 
 app = APIFlask(
     __name__,
-    title="Corporate Emission Facts API",
+    title="Corporate Emissions Facts API",
     version="0.0.1",
     openapi_blueprint_url_prefix="/api",
 )
@@ -37,7 +37,7 @@ app.config.from_mapping(
         "name": "GNU General Public License 3.0",
         "url": "https://www.gnu.org/licenses/gpl-3.0.en.html",
     },
-    TAGS=["CorporateEmissionFacts"],
+    TAGS=["CorporateEmissionsFacts"],
 )
 if app.config["ENVIRONMENT"] == "development":
     CORS(origins=["http://localhost:3000"]).init_app(app)
@@ -62,7 +62,7 @@ def teardown_db(exception):
 
 @app.get("/api/companies/<int:company_id>")
 @app.output(CompanyOutput)
-@app.doc(tags=["CorporateEmissionFacts"])
+@app.doc(tags=["CorporateEmissionsFacts"])
 def get_company(company_id):
     """
     Get a specific company's emissions data
@@ -73,7 +73,7 @@ def get_company(company_id):
 @app.get("/api/companies")
 @app.input(CompanyQueryInput, location="query")
 @app.output(CompanyListOutput)
-@app.doc(tags=["CorporateEmissionFacts"])
+@app.doc(tags=["CorporateEmissionsFacts"])
 def get_companies(query):
     """
     Query a list of companies and get their emissions data
@@ -102,7 +102,7 @@ def get_companies(query):
 @app.get("/api/emissionComparisonFact")
 @app.input(EmissionFactQueryInput, location="query")
 @app.output(EmissionComparisonFactOutput)
-@app.doc(tags=["CorporateEmissionFacts"])
+@app.doc(tags=["CorporateEmissionsFacts"])
 def get_emission_comparison_fact(query):
     """
     Get a fact comparing an emission quantity to an action with equivalent impact.
@@ -122,7 +122,7 @@ def get_emission_comparison_fact(query):
 @app.get("/api/format-quantity")
 @app.input(FormatQuantityQueryInput, location="query")
 @app.output(FormatQuantityOutput)
-@app.doc(tags=["CorporateEmissionFacts"])
+@app.doc(tags=["CorporateEmissionsFacts"])
 def get_formatted_quantity(query):
     """
     Utility method for formatting unitful data

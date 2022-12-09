@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Corporate Emission Facts API
+ * Corporate Emissions Facts API
  * This is a free and public API that exposes sanitized corporate emissions data sourced from the <a href=\"https://www.epa.gov/ghgreporting\" target=\"_blank\" rel=\"noopener noreferrer\">EPA Greenhouse Gas Reporting Program</a>. Functions that aid public comprehension of the magnitude of corporate emissions are also included.
  *
  * The version of the OpenAPI document: 0.0.1
