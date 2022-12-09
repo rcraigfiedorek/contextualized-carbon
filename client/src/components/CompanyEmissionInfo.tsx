@@ -1,11 +1,9 @@
 import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
-import Button from "react-bootstrap/Button";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Spinner from "react-bootstrap/Spinner";
 import Tooltip from "react-bootstrap/Tooltip";
 import { CompanyOutput } from "../api";
 import { api } from "../config";
+import { ButtonCard } from "./ButtonCard";
 
 interface CompanyEmissionInfoProps {
   company?: CompanyOutput;
@@ -63,82 +61,33 @@ export const CompanyEmissionInfo: React.FunctionComponent<
     refreshFact(false);
   }, [emission]);
 
-  const renderTooltip = (props: any) => (
-    <Tooltip id="card-tooltip" {...props}>
-      Click to randomize
-    </Tooltip>
-  );
-
   const topCardLoading = !company || !year || emissionIsLoading;
   const bottomCardLoading = topCardLoading || factIsLoading;
 
-  const topCardBody = (
-    <>
-      {`In ${year}, facilities in the US owned by `}
-      <b>{company?.name}</b>
-      {" reported emissions equivalent to "}
-      <b>{formattedEmission}</b>
-      {" of CO"}
-      <sub>{"2"}</sub>
-      {"."}
-    </>
-  );
-  const bottomCardBody = fact ? (
-    <div dangerouslySetInnerHTML={{ __html: fact }} />
-  ) : (
-    <></>
-  );
-
   return (
     <div className="card-container">
-      <OverlayTrigger
-        placement="right"
-        delay={{ show: 250, hide: 0 }}
-        overlay={renderTooltip}
+      <ButtonCard
+        isLoading={topCardLoading}
+        tooltipText="Click to randomize"
+        onClick={onCompanyClick}
       >
-        <Button
-          className="text-card"
-          disabled={topCardLoading}
-          onClick={!topCardLoading ? () => onCompanyClick() : undefined}
-          bsPrefix="no-css"
-        >
-          {!topCardLoading ? (
-            topCardBody
-          ) : (
-            <span className="spinner-container">
-              <Spinner
-                className="initializing-spinner"
-                animation="border"
-                role="status"
-              />
-            </span>
-          )}
-        </Button>
-      </OverlayTrigger>
-      <OverlayTrigger
-        placement="right"
-        delay={{ show: 250, hide: 0 }}
-        overlay={renderTooltip}
+        <>
+          {`In ${year}, facilities in the US owned by `}
+          <b>{company?.name}</b>
+          {" reported emissions equivalent to "}
+          <b>{formattedEmission}</b>
+          {" of CO"}
+          <sub>{"2"}</sub>
+          {"."}
+        </>
+      </ButtonCard>
+      <ButtonCard
+        isLoading={bottomCardLoading}
+        tooltipText="Click to randomize"
+        onClick={refreshFact}
       >
-        <Button
-          className="text-card"
-          disabled={bottomCardLoading}
-          onClick={!bottomCardLoading ? () => refreshFact() : undefined}
-          bsPrefix="no-css"
-        >
-          {!bottomCardLoading ? (
-            bottomCardBody
-          ) : (
-            <span className="spinner-container">
-              <Spinner
-                className="initializing-spinner"
-                animation="border"
-                role="status"
-              />
-            </span>
-          )}
-        </Button>
-      </OverlayTrigger>
+        {fact ? <div dangerouslySetInnerHTML={{ __html: fact }} /> : <></>}
+      </ButtonCard>
     </div>
   );
 };
