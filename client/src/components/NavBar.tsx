@@ -19,7 +19,7 @@ export const NavBar: React.FunctionComponent<NavBarProps> = ({
   const navBarLinks: NavBarLinkProps[] = [
     { href: "/api/docs", label: "API Documentation", iconSrc: openapi },
     {
-      href: "https://github.com/rcraigfiedorek/emissions-bot",
+      href: "https://github.com/rcraigfiedorek/contextualized-carbon",
       label: "Source code",
       iconSrc: github,
     },

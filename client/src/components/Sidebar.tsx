@@ -73,7 +73,7 @@ export const Sidebar: React.FunctionComponent<SidebarProps> = ({
           </p>
           <p>
             <a
-              href="https://github.com/rcraigfiedorek/emissions-bot/blob/main/SOURCES.md"
+              href="https://github.com/rcraigfiedorek/contextualized-carbon/blob/main/SOURCES.md"
               target="_blank"
               rel="noopener noreferrer"
             >
