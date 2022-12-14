@@ -2,6 +2,8 @@
 
 Web application and API built on a stack of [Flask](https://flask.palletsprojects.com/en/2.2.x/), [Pandas](https://pandas.pydata.org/), [SQLAlchemy](https://www.sqlalchemy.org/), [PostgreSQL](https://www.postgresql.org/), [React](https://reactjs.org/), and [Nginx](https://www.nginx.com/). Deployed using [Github Actions](https://github.com/features/actions) and [Docker Compose](https://docs.docker.com/compose/) to a [Google Compute Engine](https://cloud.google.com/compute) instance.
 
+Transforms and exposes EPA data on corporate greenhouse gas emissions in the United States. Generates non-technical descriptions that contextualize the magnitude and impact of these greenhouse gas emissions.
+
 Currently hosted at [emissions.craigf.io](https://emissions.craigf.io).
 
 ![Screenshot of application](emissions_screenshot.png "Screenshot of application")
