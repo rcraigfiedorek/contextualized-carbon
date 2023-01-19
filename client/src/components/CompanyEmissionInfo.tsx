@@ -1,6 +1,5 @@
 import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
-import Tooltip from "react-bootstrap/Tooltip";
 import { CompanyOutput } from "../api";
 import { api } from "../config";
 import { ButtonCard } from "./ButtonCard";
@@ -8,12 +7,13 @@ import { ButtonCard } from "./ButtonCard";
 interface CompanyEmissionInfoProps {
   company?: CompanyOutput;
   year?: string;
-  onCompanyClick: () => void;
+  onCompanyClick: () => Promise<void>;
+  changeFactOnCompanyClick?: boolean;
 }
 
 export const CompanyEmissionInfo: React.FunctionComponent<
   CompanyEmissionInfoProps
-> = ({ company, year, onCompanyClick }) => {
+> = ({ company, year, onCompanyClick, changeFactOnCompanyClick }) => {
   const [fact, setFact] = useState<string>();
   const [currentFactShuffleKey, setCurrentFactShuffleKey] = useState<number>();
   const [nextFactShuffleKey, setNextFactShuffleKey] = useState<number>();
@@ -57,6 +57,13 @@ export const CompanyEmissionInfo: React.FunctionComponent<
       });
   };
 
+  const onCompanyClickChangeFact = () =>
+    onCompanyClick().then(() => {
+      if (changeFactOnCompanyClick) {
+        refreshFact();
+      }
+    });
+
   useEffect(() => {
     refreshFact(false);
   }, [emission]);
@@ -69,7 +76,7 @@ export const CompanyEmissionInfo: React.FunctionComponent<
       <ButtonCard
         isLoading={topCardLoading}
         tooltipText="Click to randomize"
-        onClick={onCompanyClick}
+        onClick={onCompanyClickChangeFact}
       >
         <>
           {`In ${year}, facilities in the US owned by `}

@@ -21,7 +21,7 @@ function App() {
   const displayRandomWorstOffender = (year?: string) => {
     setDisplayedCompany(undefined);
     setDisplayedYear(undefined);
-    getRandomWorstOffender(year).then(
+    return getRandomWorstOffender(year).then(
       ([worstOffenderCompany, worstOffenderYear]) => {
         setDisplayedCompany(worstOffenderCompany);
         setDisplayedYear(worstOffenderYear);
@@ -48,6 +48,7 @@ function App() {
           company={displayedCompany}
           year={displayedYear}
           onCompanyClick={displayRandomWorstOffender}
+          changeFactOnCompanyClick={true}
         />
       </div>
     </div>
