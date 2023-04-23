@@ -104,3 +104,12 @@ See [this Github issue](https://github.com/rcraigfiedorek/emissions-facts/issues
 Deployment logic lives in `docker-compose.prod.yml`, `.github/workflows/update_gce.yml`, and `google/compute/instance-startup.sh`. The Docker compose file specifies how the production virtual machine should serve the application containers. The Github Actions wokflow builds and pushes the production Docker images to Dockerhub, copies the Docker compose file and the startup shell script to the virtual machine, and runs the startup script on the virtual machine. The startup script pulls the production database password from Google Cloud Secret Manager, pulls the images from Dockerhub, and serves the application using `docker compose up`.
 
 This production environment won't scale very far if the webpage begins to see more traffic; it was chosen with absolute minimization of cloud computing costs in mind. See [this Github issue](https://github.com/rcraigfiedorek/emissions-facts/issues/5) for desired future work in deployment and cloud resource management.
+
+### Renewing HTTPS Certificate
+
+SSH into the host VM. While the service is running, run the following command:
+
+```
+sudo docker compose -f /path/to/docker-compose.prod.yml run --rm certbot renew
+```
+Then restart the service so the new certificate is picked up by Nginx.
